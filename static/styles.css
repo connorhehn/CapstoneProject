@@ -137,7 +137,7 @@ body {
 
 #language-select {
     width: 150px;
-    height: 40px;
+    height: 35px;
     /* padding: 10px 20px; */
     margin-bottom: 10px; /* Add margin between buttons */
     border: none;
@@ -155,7 +155,7 @@ body {
 
 .sidebar button {
     width: 150px; /* Set the width */
-    height: 40px; /* Set the height */
+    height: 35px; /* Set the height */
     margin-bottom: 10px; /* Add margin between buttons */
     display: block; /* Make buttons appear in block format */
     border: none; /* Remove default border */
@@ -163,4 +163,25 @@ body {
     border-radius: 5px; /* Rounded corners */
     cursor: pointer; /* Add pointer cursor */
     transition: background-color 0.3s ease; /* Smooth transition */
+}
+
+/* Style for the credits */
+#credits {
+    margin-top: auto; /* Push the credits to the bottom */
+    text-align: center; /* Center-align the text */
+}
+
+#credits p {
+    font-size: 18px; /* Adjust font size */
+    margin-bottom: 10px; /* Add margin below paragraphs */
+}
+
+#credits ul {
+    list-style-type: none; /* Remove bullet points */
+    padding: 0; /* Remove default padding */
+}
+
+#credits li {
+    font-size: 16px; /* Adjust font size */
+    margin-bottom: 5px; /* Add margin between list items */
 }
