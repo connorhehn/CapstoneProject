@@ -4,9 +4,8 @@ from gtts import gTTS
 import speech_recognition as sr
 import os
 
+# Initialize flask
 app = Flask(__name__)
-
-# app = Flask(__name__, static_url_path='/static')
 
 # Initialize the Hugging Face model
 client = InferenceClient("mistralai/Mixtral-8x7B-Instruct-v0.1")
@@ -18,8 +17,8 @@ italian_system_prompt = "Sei un utile assistente AI. Si prega di rispondere alle
 french_system_prompt = "Vous êtes un assistant IA utile. Veuillez répondre aux questions de manière concise et polie. Vous êtes situé sur le campus de l'Université Fairfield, à Fairfield, CT."
 german_system_prompt = "Sie sind ein hilfreicher KI-Assistent. Bitte beantworten Sie die Fragen prägnant und höflich. Sie befinden sich auf dem Fairfield University Campus in Fairfield, CT."
 
+# Initialize conversation history
 conversation_history = []
-
 
 def format_prompt(message, history):
     prompt = "<s>"
@@ -28,7 +27,6 @@ def format_prompt(message, history):
         prompt += f" {bot_response}</s> "
     prompt += f"[INST] {message} [/INST]"
     return prompt
-
 
 def generate_output(prompt, history, system_prompt):
     formatted_prompt = format_prompt(f"{system_prompt}, {prompt}", history)
@@ -43,12 +41,6 @@ def generate_output(prompt, history, system_prompt):
     )
     output = client.text_generation(formatted_prompt, **generate_kwargs)
     return output
-
-# Your chatbot logic goes here (this is just a placeholder)
-def get_chatbot_response(user_input):
-    # You need to implement your chatbot logic here
-    # For now, let's just echo back the user's input
-    return "hello world!"
 
 @app.route('/')
 def index():
@@ -75,7 +67,6 @@ def process_message():
     bot_response = generate_output(user_input, conversation_history, system_prompt)
     conversation_history.append((user_input, bot_response))
     return jsonify({'response': bot_response})
-
 
 @app.route('/clear_history', methods=['POST'])
 def clear_history():
