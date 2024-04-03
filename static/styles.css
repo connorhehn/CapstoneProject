@@ -90,3 +90,7 @@ body {
     border-radius: 5px;
     cursor: pointer;
 }
+
+.active {
+    background-color: green;
+}

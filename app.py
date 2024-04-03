@@ -20,6 +20,9 @@ german_system_prompt = "Sie sind ein hilfreicher KI-Assistent. Bitte beantworten
 # Initialize conversation history
 conversation_history = []
 
+# List of valid buildings (replace with your actual data)
+valid_buildings = ["Building A", "Building B", "Building C"]
+
 def format_prompt(message, history):
     prompt = "<s>"
     for user_prompt, bot_response in history:
@@ -72,6 +75,25 @@ def clear_history():
     global conversation_history
     conversation_history = []
     return jsonify({'success': True})
+
+@app.route('/handle_mapping', methods=['POST'])
+def handle_mapping():
+    # Get the building name from the request JSON data
+    data = request.get_json()
+    building_name = data.get('building').lower()  # Convert to lowercase
+    print(building_name)
+
+    # Convert valid building names to lowercase for case-insensitive comparison
+    valid_buildings_lower = [building.lower() for building in valid_buildings]
+
+    # Validate the building name
+    if building_name in valid_buildings_lower:
+        # Building name is valid, prompt for ending location or perform further logic
+        return jsonify({'status': 'success', 'message': 'Please enter the ending location.'})
+    else:
+        # Building name is not valid, send an error message
+        return jsonify({'status': 'error', 'message': 'Invalid building name.'})
+
 
 if __name__ == '__main__':
     app.run(debug=True)
