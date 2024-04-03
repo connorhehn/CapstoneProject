@@ -32,6 +32,17 @@
             <i class="fa-brands fa-spotify"></i><button onclick="handleSpotifyClick()">Spotify</button>
             <i class="fa-solid fa-map-location-dot"></i><button onclick="handleGraphHopperClick">Map</button>
 
+            <div id="credits">
+                <p>Presented By:</p>
+                <ul>
+                    <li>Andrew Visceglia</li>
+                    <li>Connor Hehn</li>
+                    <li>David McNulty</li>
+                    <li>Reyes Huerta</li>
+                    <li>Dr. Sidike Pahending</li>
+                </ul>
+            </div>
+
         </div>
         <div class="chat-container">
             <ul class="chat">
@@ -41,6 +52,7 @@
             <div class="input-container">
                 <input type="text" id="user-input" placeholder="Type your message..." onkeydown="handleKeyDown(event)">
                 <button id="send-button" onclick="sendMessage()">Send</button>
+                <button id="record-button" onclick="startSpeechRecognition()">Record</button>
             </div>
         </div>
     </div>

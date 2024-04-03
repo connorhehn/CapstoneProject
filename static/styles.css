@@ -12,7 +12,12 @@ body {
     width: 15%;
     background-color: #f0f0f0; /* Adjust as needed */
     padding: 20px; /* Add padding around the sidebar */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
+
 
 /* Style for the logo */
 #logo {
@@ -73,6 +78,14 @@ body {
     padding: 8px 16px;
     border: none;
     background-color: #4CAF50;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+}
+#record-button {
+    padding: 8px 16px;
+    border: none;
+    background-color: #4ca3af;
     color: white;
     border-radius: 5px;
     cursor: pointer;

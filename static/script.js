@@ -71,3 +71,22 @@ function handleKeyDown(event) {
         sendMessage(); // Calls the sendMessage function when Enter is pressed
     }
 }
+
+function startSpeechRecognition() {
+    var recognition = new window.webkitSpeechRecognition(); // Create a new SpeechRecognition object
+
+    recognition.lang = "en-US"; // Set language to English (United States)
+
+    recognition.onresult = function(event) { // When speech recognition is successful
+        var transcript = event.results[0][0].transcript; // Get the recognized transcript
+        document.getElementById("user-input").value = transcript; // Set the transcript as user input
+        sendMessage(); // Call sendMessage function to process the input
+    };
+
+    recognition.onerror = function(event) { // If there's an error in speech recognition
+        console.error("Speech recognition error:", event.error);
+        alert("Error occurred in speech recognition. Please try again."); // Show an error message
+    };
+
+    recognition.start(); // Start speech recognition
+}

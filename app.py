@@ -63,7 +63,6 @@ def process_message():
     else:
         system_prompt = english_system_prompt
 
-    print(selected_language)
     bot_response = generate_output(user_input, conversation_history, system_prompt)
     conversation_history.append((user_input, bot_response))
     return jsonify({'response': bot_response})
@@ -71,7 +70,6 @@ def process_message():
 @app.route('/clear_history', methods=['POST'])
 def clear_history():
     global conversation_history
-    print(conversation_history)
     conversation_history = []
     return jsonify({'success': True})
 
