@@ -1,0 +1,79 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+.container {
+    display: flex;
+    height: 100vh;
+}
+/* CSS styles for the sidebar */
+.sidebar {
+    width: 15%;
+    background-color: #f0f0f0; /* Adjust as needed */
+    padding: 20px; /* Add padding around the sidebar */
+}
+
+/* Style for the logo */
+#logo {
+    margin-bottom: 20px; /* Add margin below the logo */
+}
+
+/* Style for the buttons and icons */
+.sidebar button {
+    margin-bottom: 10px; /* Add margin between buttons */
+    display: block; /* Make buttons appear in block format */
+}
+
+/* Style for the dropdown container */
+.language-container {
+    margin-bottom: 20px; /* Add margin below the language dropdown */
+}
+
+/* Style for the language dropdown */
+#language-select {
+    width: 100%; /* Make dropdown fill entire width */
+    padding: 5px; /* Add padding inside the dropdown */
+}
+
+.chat-container {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+}
+.chat {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+.message {
+    background-color: #f1f1f1;
+    padding: 10px;
+    margin: 10px;
+    border-radius: 5px;
+}
+.user-message {
+    text-align: left;
+    background-color: #93c7dc;
+}
+.input-container {
+    position: sticky;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+}
+#user-input {
+    flex: 1;
+    margin-right: 10px;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+#send-button {
+    padding: 8px 16px;
+    border: none;
+    background-color: #4CAF50;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+}
