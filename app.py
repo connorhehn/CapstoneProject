@@ -71,7 +71,7 @@ def process_message():
     conversation_history.append((user_input, bot_response))
     return jsonify({'response': bot_response})
 
-# Clear History Route
+# Clear Conversation History
 @app.route('/clear_history', methods=['POST'])
 def clear_history():
     global conversation_history

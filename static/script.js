@@ -1,4 +1,5 @@
 let mapEnabled = false; // Flag to track if mapping is enabled
+let spotifyEnabled = false; // Flag to track if spotify is enabled
 
 function sendMessage() {
     // Get user input
@@ -12,6 +13,15 @@ function sendMessage() {
         } else {
             displayMessage("Please enter a building", false);
             updateBotResponse("Please enter a building");
+        }
+    } else if (spotifyEnabled) {
+        // If spotify is enabled, handle spotify functionality
+        if (userInput !== "") {
+            // Pass user input to Python Flask for processing
+            sendSpotifyRequest(userInput);
+        } else {
+            displayMessage("Please enter a song title or artist", false);
+            updateBotResponse("Please enter a song title or artist");
         }
     } else {
         sendRegularMessage(userInput)
@@ -152,11 +162,8 @@ function startSpeechRecognition() {
 
 function toggleMap() {
     mapEnabled = !mapEnabled; // Toggle the flag
-
-    // Update the appearance of the map button
-    const mapButton = document.getElementById("map-button");
-    mapButton.classList.toggle("active", mapEnabled); // Add or remove "active" class
-
+    spotifyEnabled = false;
+    updateButtons(spotifyEnabled,mapEnabled)
     // Display message in the chat area based on the state
     if (mapEnabled) {
         displayMessage("Please enter the starting location.", false);
@@ -167,12 +174,23 @@ function toggleMap() {
     }
 }
 
-// const instructions = `
-// Start Conversation: Type your message in the text box and press "Send" to start a conversation with the chatbot.\n
-// Voice Input: Click "Record Speech" to speak instead of typing. The chatbot will transcribe and respond to your voice message.\n
-// Language Selection: Use the dropdown menu to select your preferred language for communication with the chatbot.\n
-// New Chat: Click "New Chat" to start a new conversation and clear the chat history.\n
-// `;
+function toggleSpotify(){
+    spotifyEnabled = !spotifyEnabled
+    mapEnabled = false;
+    const spotifyPrmompt = "Please enter song title"
+    // Update the appearance of the buttons
+    updateButtons(spotifyEnabled,mapEnabled)
+
+    if (spotifyEnabled) {
+        displayMessage("Please enter a song title or artist", false);
+        updateBotResponse("Please enter a song title or artist");
+    } else {
+        displayMessage("Spotify turned off.", false);
+        updateBotResponse("Spotify turned off.");
+    }
+
+}
+
 const instruct1 = "Start Conversation: Type your message in the text box and press 'Send' to start a conversation with the chatbot."
 const instruct2 = "Voice Input: Click 'Record Speech' to speak instead of typing. The chatbot will transcribe and respond to your voice message."
 const instruct3 = "Language Selection: Use the dropdown menu to select your preferred language for communication with the chatbot."
@@ -188,4 +206,14 @@ function addInstructions() {
     updateBotResponse(instruct3);
     displayMessage(instruct4);
     updateBotResponse(instruct4);
+}
+
+function updateButtons(spotifyEnabled,mapEnabled) {
+    // Update spotify button
+    const spotifyButton = document.getElementById("spotify-button");
+    spotifyButton.classList.toggle("active", spotifyEnabled); // Add or remove "active" class
+
+    // Update map button
+    const mapButton = document.getElementById("map-button");
+    mapButton.classList.toggle("active", mapEnabled); // Add or remove "active" class
 }
