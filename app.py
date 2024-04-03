@@ -33,7 +33,6 @@ def format_prompt(message, history):
 
 def generate_output(prompt, history, system_prompt):
     formatted_prompt = format_prompt(f"{system_prompt}, {prompt}", history)
-
     generate_kwargs = dict(
         temperature=0.15,
         max_new_tokens=256,
@@ -49,6 +48,7 @@ def generate_output(prompt, history, system_prompt):
 def index():
     return render_template('index.html')
 
+# Process Message Route - Normal Bot Response
 @app.route('/process_message', methods=['POST'])
 def process_message():
     user_input = request.json['message']
@@ -70,12 +70,14 @@ def process_message():
     conversation_history.append((user_input, bot_response))
     return jsonify({'response': bot_response})
 
+# Clear History Route
 @app.route('/clear_history', methods=['POST'])
 def clear_history():
     global conversation_history
     conversation_history = []
     return jsonify({'success': True})
 
+# Mapping Route
 @app.route('/handle_mapping', methods=['POST'])
 def handle_mapping():
     # Get the building name from the request JSON data
