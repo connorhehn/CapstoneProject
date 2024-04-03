@@ -10,16 +10,11 @@ function sendMessage() {
             // Pass user input to Python Flask for processing
             sendMappingRequest(userInput);
         } else {
-            displayMessage("Please enter a valid building name.", false);
+            displayMessage("Please enter a building", false);
+            updateBotResponse("Please enter a building");
         }
     } else {
-        // If mapping is not enabled, handle regular message sending
-        if (userInput !== "") {
-            // Send user's message to the server
-            sendRegularMessage(userInput);
-        } else {
-            displayMessage("Please enter a message.", false);
-        }
+        sendRegularMessage(userInput)
     }
     // Clear input field
     document.getElementById("user-input").value = "";
@@ -29,7 +24,8 @@ function sendMessage() {
 function sendMappingRequest(buildingName) {
     // Display user's message immediately
     displayMessage(buildingName, true);
-    console.log("should display")
+    // Display loading message for bot response
+    displayMessage("...", false);
 
     // Send the building name to the server for mapping
     var xhr = new XMLHttpRequest();
@@ -39,7 +35,7 @@ function sendMappingRequest(buildingName) {
         if (xhr.status === 200) {
             var responseData = JSON.parse(xhr.responseText);
             // Update chat area with bot's response
-            displayMessage(responseData.message, false);
+            updateBotResponse(responseData.message, false);
         }
     };
     xhr.send(JSON.stringify({ building: buildingName }));
@@ -59,10 +55,7 @@ function handleMapping() {
     }
 }
 
-
-
-function sendRegularMessage() {
-    var userInput = document.getElementById("user-input").value;
+function sendRegularMessage(userInput) {
     var languageSelect = document.getElementById("language-select");
     var selectedLanguage = languageSelect.value;
 
@@ -116,6 +109,8 @@ function startNewChat() {
     // Clear chat history on the client side
     var chatList = document.querySelector(".chat");
     chatList.innerHTML = '';
+    displayMessage("Hello, how can I assist you?", false);
+    updateBotResponse("Hello, how can I assist you?")
 
     // Send a POST request to clear the conversation history on the server side
     var xhr = new XMLHttpRequest();
@@ -165,7 +160,9 @@ function toggleMap() {
     // Display message in the chat area based on the state
     if (mapEnabled) {
         displayMessage("Please enter the starting location.", false);
+        updateBotResponse("Please enter the starting location.")
     } else {
         displayMessage("Mapping turned off.", false);
+        updateBotResponse("Mapping turned off.")
     }
 }
