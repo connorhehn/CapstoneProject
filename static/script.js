@@ -116,6 +116,9 @@ function displayMessage(message, isUserMessage) {
 }
 
 function startNewChat() {
+    mapEnabled = false;
+    spotifyEnabled = false;
+    updateButtons(spotifyEnabled,mapEnabled);
     // Clear chat history on the client side
     var chatList = document.querySelector(".chat");
     chatList.innerHTML = '';

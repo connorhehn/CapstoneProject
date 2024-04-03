@@ -101,3 +101,31 @@ body {
 .active {
     background-color: green;
 }
+
+#new-chat-button,
+#spotify-button,
+#instructions-button,
+#map-button {
+    margin-top: 10px;
+    padding: 10px 10px;
+    border: none;
+    background-color: lightslategray; /* Green color */
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease; /* Smooth transition */
+}
+
+#new-chat-button:hover,
+#spotify-button:hover,
+#instructions-button:hover,
+#map-button:hover {
+    background-color: #51a6b1; /* Darker green color on hover */
+}
+
+#spotify-button.active{
+    background-color: #51a6b1;
+}
+#map-button.active {
+    background-color: #51a6b1;
+}
