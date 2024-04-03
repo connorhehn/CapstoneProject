@@ -160,8 +160,17 @@ function startSpeechRecognition() {
         alert("Error occurred in speech recognition. Please try again."); // Show an error message
     };
 
+    recognition.onstart = function() { // When speech recognition starts
+        document.getElementById("record-button").classList.add("active"); // Add "active" class to record button
+    };
+
+    recognition.onend = function() { // When speech recognition ends
+        document.getElementById("record-button").classList.remove("active"); // Remove "active" class from record button
+    };
+
     recognition.start(); // Start speech recognition
 }
+
 
 function toggleMap() {
     mapEnabled = !mapEnabled; // Toggle the flag

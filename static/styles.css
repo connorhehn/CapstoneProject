@@ -21,7 +21,8 @@ body {
 
 /* Style for the logo */
 #logo {
-    margin-bottom: 20px; /* Add margin below the logo */
+    width: auto;
+    margin-bottom: 10px; /* Add margin below the logo */
 }
 
 /* Style for the buttons and icons */
@@ -77,7 +78,7 @@ body {
 #send-button {
     padding: 8px 16px;
     border: none;
-    background-color: #4CAF50;
+    background-color: rgb(131, 190, 131);
     color: white;
     border-radius: 5px;
     cursor: pointer;
@@ -92,14 +93,13 @@ body {
     display: flex; /* Ensure the button's content is displayed as flex */
     align-items: center; /* Align the content vertically */
 }
+#record-button.active {
+    background-color: red; /* Change the background color when active */
+}
 
 #mic {
     height: 100%; /* Set the height to fill the parent button */
     width: auto; /* Ensure the width adjusts proportionally */
-}
-
-.active {
-    background-color: green;
 }
 
 #new-chat-button,
@@ -109,7 +109,7 @@ body {
     margin-top: 10px;
     padding: 10px 10px;
     border: none;
-    background-color: lightslategray; /* Green color */
+    background-color: lightslategray;
     color: white;
     border-radius: 5px;
     cursor: pointer;
@@ -120,7 +120,7 @@ body {
 #spotify-button:hover,
 #instructions-button:hover,
 #map-button:hover {
-    background-color: #51a6b1; /* Darker green color on hover */
+    background-color: #51a6b1;
 }
 
 #spotify-button.active{
@@ -132,11 +132,12 @@ body {
 
 #language-select-sidebar {
     margin-top: 10px;
+    width: 55%;
     margin-bottom: 0px;
 }
 
 #language-select {
-    width: 150px;
+    /*  */
     height: 35px;
     /* padding: 10px 20px; */
     margin-bottom: 10px; /* Add margin between buttons */
@@ -154,9 +155,9 @@ body {
 
 
 .sidebar button {
-    width: 150px; /* Set the width */
+    width: 55%; /* Set the width */
     height: 35px; /* Set the height */
-    margin-bottom: 10px; /* Add margin between buttons */
+    margin-bottom: 5%; /* Add margin between buttons */
     display: block; /* Make buttons appear in block format */
     border: none; /* Remove default border */
     color: white; /* Text color */
