@@ -21,9 +21,11 @@
             <div id="language-select-sidebar" class="language-container">
                 <i class="fa-solid fa-earth-americas"></i>
                 <select id="language-select">
-                    <option value="en">English</option>
-                    <option value="es">Spanish</option>
-                    <option value="pr">Portuguese</option>
+                    <option value="english">English</option>
+                    <option value="spanish">Spanish</option>
+                    <option value="italian">Italian</option>
+                    <option value="french">French</option>
+                    <option value="german">German</option>
                 </select>
             </div>
 
@@ -37,7 +39,7 @@
                 <!-- Previous messages go here -->
             </ul>
             <div class="input-container">
-                <input type="text" id="user-input" placeholder="Type your message...">
+                <input type="text" id="user-input" placeholder="Type your message..." onkeydown="handleKeyDown(event)">
                 <button id="send-button" onclick="sendMessage()">Send</button>
             </div>
         </div>

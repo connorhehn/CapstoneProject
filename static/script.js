@@ -1,5 +1,8 @@
 function sendMessage() {
     var userInput = document.getElementById("user-input").value;
+    var languageSelect = document.getElementById("language-select");
+    var selectedLanguage = languageSelect.value;
+
     if (userInput.trim() !== "") {
         // Display user's message immediately
         displayMessage(userInput, true);
@@ -7,7 +10,7 @@ function sendMessage() {
         // Display loading message for bot response
         displayMessage("...", false);
 
-        // Send user's message to server
+        // Send user's message and selected language to server
         var xhr = new XMLHttpRequest();
         xhr.open("POST", "/process_message", true);
         xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
@@ -18,7 +21,7 @@ function sendMessage() {
                 updateBotResponse(responseData.response);
             }
         };
-        xhr.send(JSON.stringify({ message: userInput }));
+        xhr.send(JSON.stringify({ message: userInput, language: selectedLanguage }));
         document.getElementById("user-input").value = "";
     }
 }
@@ -60,4 +63,11 @@ function startNewChat() {
         }
     };
     xhr.send();
+}
+
+function handleKeyDown(event) {
+    if (event.key === "Enter") {
+        event.preventDefault(); // Prevents the default Enter key behavior (like adding a new line)
+        sendMessage(); // Calls the sendMessage function when Enter is pressed
+    }
 }

@@ -57,13 +57,30 @@ def index():
 @app.route('/process_message', methods=['POST'])
 def process_message():
     user_input = request.json['message']
-    bot_response = generate_output(user_input,conversation_history,english_system_prompt)
+    selected_language = request.json['language']
+    if selected_language == "english":
+        system_prompt = english_system_prompt
+    elif selected_language == "spanish":
+        system_prompt = spanish_system_prompt
+    elif selected_language == "french":
+        system_prompt = french_system_prompt
+    elif selected_language == "german":
+        system_prompt = german_system_prompt
+    elif selected_language == "italian":
+        system_prompt = italian_system_prompt
+    else:
+        system_prompt = english_system_prompt
+
+    print(selected_language)
+    bot_response = generate_output(user_input, conversation_history, system_prompt)
     conversation_history.append((user_input, bot_response))
     return jsonify({'response': bot_response})
+
 
 @app.route('/clear_history', methods=['POST'])
 def clear_history():
     global conversation_history
+    print(conversation_history)
     conversation_history = []
     return jsonify({'success': True})
 
