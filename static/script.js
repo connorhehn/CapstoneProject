@@ -11,8 +11,7 @@ function sendMessage() {
             // Pass user input to Python Flask for processing
             sendMappingRequest(userInput);
         } else {
-            displayMessage("Please enter a building", false);
-            updateBotResponse("Please enter a building");
+            updateAndDisplayMessage("Please enter a building", false);
         }
     } else if (spotifyEnabled) {
         // If spotify is enabled, handle spotify functionality
@@ -20,8 +19,7 @@ function sendMessage() {
             // Pass user input to Python Flask for processing
             sendSpotifyRequest(userInput);
         } else {
-            displayMessage("Please enter a song title or artist", false);
-            updateBotResponse("Please enter a song title or artist");
+            updateAndDisplayMessage("Please enter a song title or artist", false);
         }
     } else {
         sendRegularMessage(userInput)
@@ -115,6 +113,11 @@ function displayMessage(message, isUserMessage) {
     chatList.appendChild(messageElement);
 }
 
+function updateAndDisplayMessage(message, isUserMessage){
+    displayMessage(message, isUserMessage);
+    updateBotResponse(message);
+}
+
 function startNewChat() {
     mapEnabled = false;
     spotifyEnabled = false;
@@ -122,8 +125,7 @@ function startNewChat() {
     // Clear chat history on the client side
     var chatList = document.querySelector(".chat");
     chatList.innerHTML = '';
-    displayMessage("Hello, how can I assist you?", false);
-    updateBotResponse("Hello, how can I assist you?")
+    updateAndDisplayMessage("Hello, how can I assist you?", false);
 
     // Send a POST request to clear the conversation history on the server side
     var xhr = new XMLHttpRequest();
@@ -178,11 +180,9 @@ function toggleMap() {
     updateButtons(spotifyEnabled,mapEnabled)
     // Display message in the chat area based on the state
     if (mapEnabled) {
-        displayMessage("Please enter the starting location.", false);
-        updateBotResponse("Please enter the starting location.");
+        updateAndDisplayMessage("Please enter the starting location.", false);
     } else {
-        displayMessage("Mapping turned off.", false);
-        updateBotResponse("Mapping turned off.");
+        updateAndDisplayMessage("Mapping turned off.", false);
     }
 }
 
@@ -194,11 +194,9 @@ function toggleSpotify(){
     updateButtons(spotifyEnabled,mapEnabled)
 
     if (spotifyEnabled) {
-        displayMessage("Please enter a song title or artist", false);
-        updateBotResponse("Please enter a song title or artist");
+        updateAndDisplayMessage("Please enter a song title or artist", false);
     } else {
-        displayMessage("Spotify turned off.", false);
-        updateBotResponse("Spotify turned off.");
+        updateAndDisplayMessage("Spotify turned off.", false);
     }
 
 }
@@ -207,17 +205,17 @@ const instruct1 = "Start Conversation: Type your message in the text box and pre
 const instruct2 = "Voice Input: Click 'Record Speech' to speak instead of typing. The chatbot will transcribe and respond to your voice message."
 const instruct3 = "Language Selection: Use the dropdown menu to select your preferred language for communication with the chatbot."
 const instruct4 = "New Chat: Click 'New Chat' to start a new conversation and clear the chat history."
+const instruct5 = "Spotify: Click the spotify button to toggle functionality"
+const instruct6 = "Map: Click the map button to toggle mapping functionality"
 
 function addInstructions() {
     console.log("hello");
-    displayMessage(instruct1);
-    updateBotResponse(instruct1);
-    displayMessage(instruct2);
-    updateBotResponse(instruct2);
-    displayMessage(instruct3);
-    updateBotResponse(instruct3);
-    displayMessage(instruct4);
-    updateBotResponse(instruct4);
+    updateAndDisplayMessage(instruct1,false);
+    updateAndDisplayMessage(instruct2,false);
+    updateAndDisplayMessage(instruct3,false);
+    updateAndDisplayMessage(instruct4,false);
+    updateAndDisplayMessage(instruct5,false);
+    updateAndDisplayMessage(instruct6,false);
 }
 
 function updateButtons(spotifyEnabled,mapEnabled) {
