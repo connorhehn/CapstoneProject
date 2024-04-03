@@ -129,3 +129,36 @@ body {
 #map-button.active {
     background-color: #51a6b1;
 }
+
+#language-select-sidebar {
+    margin-top: 20px;
+}
+
+#language-select {
+    width: 150px;
+    height: 40px;
+    /* padding: 10px 20px; */
+    margin-bottom: 10px; /* Add margin between buttons */
+    border: none;
+    background-color: lightslategray; /* Green color */
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease; /* Smooth transition */
+}
+#language-select:hover {
+    background-color: #51a6b1; /* Darker green color on hover */
+}
+
+
+.sidebar button {
+    width: 150px; /* Set the width */
+    height: 40px; /* Set the height */
+    margin-bottom: 10px; /* Add margin between buttons */
+    display: block; /* Make buttons appear in block format */
+    border: none; /* Remove default border */
+    color: white; /* Text color */
+    border-radius: 5px; /* Rounded corners */
+    cursor: pointer; /* Add pointer cursor */
+    transition: background-color 0.3s ease; /* Smooth transition */
+}
