@@ -10,7 +10,7 @@ body {
 /* CSS styles for the sidebar */
 .sidebar {
     width: 15%;
-    background-color: #f0f0f0; /* Adjust as needed */
+    background-color: #f1f1f1; /* Adjust as needed */
     padding: 20px; /* Add padding around the sidebar */
     display: flex;
     flex-direction: column;
