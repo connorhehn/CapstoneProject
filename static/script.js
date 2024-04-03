@@ -167,15 +167,25 @@ function toggleMap() {
     }
 }
 
-const instructions = `
-Start Conversation: Type your message in the text box and press "Send" to start a conversation with the chatbot.\n
-Voice Input: Click "Record Speech" to speak instead of typing. The chatbot will transcribe and respond to your voice message.\n
-Language Selection: Use the dropdown menu to select your preferred language for communication with the chatbot.\n
-New Chat: Click "New Chat" to start a new conversation and clear the chat history.\n
-`;
+// const instructions = `
+// Start Conversation: Type your message in the text box and press "Send" to start a conversation with the chatbot.\n
+// Voice Input: Click "Record Speech" to speak instead of typing. The chatbot will transcribe and respond to your voice message.\n
+// Language Selection: Use the dropdown menu to select your preferred language for communication with the chatbot.\n
+// New Chat: Click "New Chat" to start a new conversation and clear the chat history.\n
+// `;
+const instruct1 = "Start Conversation: Type your message in the text box and press 'Send' to start a conversation with the chatbot."
+const instruct2 = "Voice Input: Click 'Record Speech' to speak instead of typing. The chatbot will transcribe and respond to your voice message."
+const instruct3 = "Language Selection: Use the dropdown menu to select your preferred language for communication with the chatbot."
+const instruct4 = "New Chat: Click 'New Chat' to start a new conversation and clear the chat history."
 
 function addInstructions() {
     console.log("hello");
-    displayMessage(instructions);
-    updateBotResponse(instructions);
+    displayMessage(instruct1);
+    updateBotResponse(instruct1);
+    displayMessage(instruct2);
+    updateBotResponse(instruct2);
+    displayMessage(instruct3);
+    updateBotResponse(instruct3);
+    displayMessage(instruct4);
+    updateBotResponse(instruct4);
 }
