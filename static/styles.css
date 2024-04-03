@@ -131,7 +131,8 @@ body {
 }
 
 #language-select-sidebar {
-    margin-top: 20px;
+    margin-top: 10px;
+    margin-bottom: 0px;
 }
 
 #language-select {
@@ -143,6 +144,7 @@ body {
     background-color: lightslategray; /* Green color */
     color: white;
     border-radius: 5px;
+    text-align: center;
     cursor: pointer;
     transition: background-color 0.3s ease; /* Smooth transition */
 }
