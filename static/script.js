@@ -160,9 +160,22 @@ function toggleMap() {
     // Display message in the chat area based on the state
     if (mapEnabled) {
         displayMessage("Please enter the starting location.", false);
-        updateBotResponse("Please enter the starting location.")
+        updateBotResponse("Please enter the starting location.");
     } else {
         displayMessage("Mapping turned off.", false);
-        updateBotResponse("Mapping turned off.")
+        updateBotResponse("Mapping turned off.");
     }
+}
+
+const instructions = `
+Start Conversation: Type your message in the text box and press "Send" to start a conversation with the chatbot.\n
+Voice Input: Click "Record Speech" to speak instead of typing. The chatbot will transcribe and respond to your voice message.\n
+Language Selection: Use the dropdown menu to select your preferred language for communication with the chatbot.\n
+New Chat: Click "New Chat" to start a new conversation and clear the chat history.\n
+`;
+
+function addInstructions() {
+    console.log("hello");
+    displayMessage(instructions);
+    updateBotResponse(instructions);
 }

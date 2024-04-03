@@ -85,10 +85,17 @@ body {
 #record-button {
     padding: 8px 16px;
     border: none;
-    background-color: #4ca3af;
+    background-color: #51a6b1;
     color: white;
     border-radius: 5px;
     cursor: pointer;
+    display: flex; /* Ensure the button's content is displayed as flex */
+    align-items: center; /* Align the content vertically */
+}
+
+#mic {
+    height: 100%; /* Set the height to fill the parent button */
+    width: auto; /* Ensure the width adjusts proportionally */
 }
 
 .active {
