@@ -98,5 +98,18 @@ def handle_mapping():
         return jsonify({'status': 'error', 'message': 'Invalid building name.'})
 
 
+# Spotify Route
+@app.route('/handle_spotify', methods=['POST'])
+def handle_spotify():
+    # Get the music name from the request JSON data
+    data = request.get_json()
+    musicRequest = data.get('music')  # Convert to lowercase
+    print(musicRequest)
+
+    if (len(musicRequest) > 3):
+        return jsonify({'status': 'success', 'message': 'Now playing {music_request}'})
+    else:
+        return jsonify({'status': 'error', 'message': 'Invalid song or artist name.'})
+
 if __name__ == '__main__':
     app.run(debug=True)

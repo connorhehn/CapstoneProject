@@ -29,6 +29,26 @@ function sendMessage() {
 }
 
 
+function sendSpotifyRequest(musicRequest) {
+    // Display user's message immediately
+    displayMessage(musicRequest, true);
+    // Display loading message for bot response
+    displayMessage("...", false);
+
+    // Send the building name to the server for mapping
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "/handle_spotify", true);
+    xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+    xhr.onload = function () {
+        if (xhr.status === 200) {
+            var responseData = JSON.parse(xhr.responseText);
+            // Update chat area with bot's response
+            updateBotResponse(responseData.message, false);
+        }
+    };
+    xhr.send(JSON.stringify({ music: musicRequest }));
+}
+
 function sendMappingRequest(buildingName) {
     // Display user's message immediately
     displayMessage(buildingName, true);
@@ -89,7 +109,6 @@ function sendRegularMessage(userInput) {
         document.getElementById("user-input").value = "";
     }
 }
-
 
 function updateBotResponse(botMessage) {
     // Find the loading message and replace it with the bot's response
@@ -172,7 +191,6 @@ function startSpeechRecognition() {
 
     recognition.start(); // Start speech recognition
 }
-
 
 function toggleMap() {
     mapEnabled = !mapEnabled; // Toggle the flag
