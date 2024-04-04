@@ -12,7 +12,7 @@ function sendMessage() {
             // Pass user input to Python Flask for processing
             sendMappingRequest(userInput);
         } else {
-            updateAndDisplayMessage("Please enter a building", false);
+            updateAndDisplayMessage("Please enter a building in the textbox below.", false);
         }
     } else if (spotifyEnabled) {
         // If spotify is enabled, handle spotify functionality
@@ -20,7 +20,7 @@ function sendMessage() {
             // Pass user input to Python Flask for processing
             sendSpotifyRequest(userInput);
         } else {
-            updateAndDisplayMessage("Please enter a song title or artist", false);
+            updateAndDisplayMessage("Please enter a song title or artist.", false);
         }
     } else {
         sendRegularMessage(userInput)
@@ -211,12 +211,11 @@ function toggleSpotify(){
     hideAdditionalButtons();
     spotifyEnabled = !spotifyEnabled
     mapEnabled = false;
-    const spotifyPrmompt = "Please enter song title"
     // Update the appearance of the buttons
     updateButtons(spotifyEnabled,mapEnabled)
 
     if (spotifyEnabled) {
-        updateAndDisplayMessage("Please enter a song title or artist", false);
+        updateAndDisplayMessage("Please enter a song title or artist.", false);
     } else {
         updateAndDisplayMessage("Spotify turned off.", false);
     }

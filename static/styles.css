@@ -78,10 +78,13 @@ body {
 #send-button {
     padding: 8px 16px;
     border: none;
-    background-color: rgb(131, 190, 131);
+    background-color: #83be83;
     color: white;
     border-radius: 5px;
     cursor: pointer;
+}
+#send-button:hover {
+    background-color: #5ebd5e;
 }
 #record-button {
     padding: 8px 16px;
@@ -93,8 +96,11 @@ body {
     display: flex; /* Ensure the button's content is displayed as flex */
     align-items: center; /* Align the content vertically */
 }
+#record-button:hover{
+    background-color: #34a6b6;
+}
 #record-button.active {
-    background-color: red; /* Change the background color when active */
+    background-color: lightcoral; /* Change the background color when active */
 }
 
 #mic {
