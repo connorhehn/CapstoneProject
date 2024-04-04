@@ -36,7 +36,7 @@ def generate_output(prompt, history, system_prompt):
     formatted_prompt = format_prompt(f"{system_prompt}, {prompt}", history)
     generate_kwargs = dict(
         temperature=0.15,
-        max_new_tokens=256,
+        max_new_tokens=512,
         top_p=0.9,
         repetition_penalty=1.0,
         do_sample=True,

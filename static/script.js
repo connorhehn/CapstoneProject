@@ -4,6 +4,7 @@ let spotifyEnabled = false; // Flag to track if spotify is enabled
 function sendMessage() {
     // Get user input
     var userInput = document.getElementById("user-input").value.trim();
+    hideAdditionalButtons();
 
     if (mapEnabled) {
         // If mapping is enabled, handle mapping functionality
@@ -140,6 +141,7 @@ function updateAndDisplayMessage(message, isUserMessage){
 function startNewChat() {
     mapEnabled = false;
     spotifyEnabled = false;
+    showAdditionalButtons();
     updateButtons(spotifyEnabled,mapEnabled);
     // Clear chat history on the client side
     var chatList = document.querySelector(".chat");
@@ -193,6 +195,7 @@ function startSpeechRecognition() {
 }
 
 function toggleMap() {
+    hideAdditionalButtons();
     mapEnabled = !mapEnabled; // Toggle the flag
     spotifyEnabled = false;
     updateButtons(spotifyEnabled,mapEnabled)
@@ -205,6 +208,7 @@ function toggleMap() {
 }
 
 function toggleSpotify(){
+    hideAdditionalButtons();
     spotifyEnabled = !spotifyEnabled
     mapEnabled = false;
     const spotifyPrmompt = "Please enter song title"
@@ -227,13 +231,14 @@ const instruct5 = "Spotify: Click the spotify button to toggle functionality"
 const instruct6 = "Map: Click the map button to toggle mapping functionality"
 
 function addInstructions() {
-    console.log("hello");
+    startNewChat();
     updateAndDisplayMessage(instruct1,false);
     updateAndDisplayMessage(instruct2,false);
     updateAndDisplayMessage(instruct3,false);
     updateAndDisplayMessage(instruct4,false);
     updateAndDisplayMessage(instruct5,false);
     updateAndDisplayMessage(instruct6,false);
+    hideAdditionalButtons();
 }
 
 function updateButtons(spotifyEnabled,mapEnabled) {
@@ -244,4 +249,22 @@ function updateButtons(spotifyEnabled,mapEnabled) {
     // Update map button
     const mapButton = document.getElementById("map-button");
     mapButton.classList.toggle("active", mapEnabled); // Add or remove "active" class
+}
+
+// Function to hide additional buttons
+function hideAdditionalButtons() {
+    var additionalButtons = document.getElementById("additional-buttons");
+    additionalButtons.style.display = "none";
+}
+
+// Function to show additional buttons
+function showAdditionalButtons() {
+    var additionalButtons = document.getElementById("additional-buttons");
+    additionalButtons.style.display = "block";
+}
+
+function handleSample(button){
+    const question = button.innerText.trim(); // Get the inner text of the button
+    hideAdditionalButtons();
+    sendRegularMessage(question);
 }

@@ -186,3 +186,23 @@ body {
     font-size: 16px; /* Adjust font size */
     margin-bottom: 5px; /* Add margin between list items */
 }
+
+#additional-buttons {
+    margin-top: 20px; /* Add margin above the additional buttons */
+}
+
+#additional-buttons button {
+    width: 45%; /* Set the width to fill the container */
+    padding: 10px; /* Add padding inside the buttons */
+    margin-bottom: 10px; /* Add margin between buttons */
+    border: none; /* Remove default border */
+    background-color: lightslategray; /* Set background color */
+    color: white; /* Set text color */
+    border-radius: 5px; /* Rounded corners */
+    cursor: pointer; /* Add pointer cursor */
+    transition: background-color 0.3s ease; /* Smooth transition */
+}
+
+#additional-buttons button:hover {
+    background-color: #51a6b1; /* Darker background color on hover */
+}
