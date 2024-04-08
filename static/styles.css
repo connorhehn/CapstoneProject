@@ -212,3 +212,7 @@ body {
 #additional-buttons button:hover {
     background-color: #51a6b1; /* Darker background color on hover */
 }
+
+audio {
+    width: 100%;
+}
