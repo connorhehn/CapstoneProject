@@ -138,17 +138,27 @@ function sendMappingRequest(buildingName) {
     displayMessage("...", false);
 
     // Send the building name to the server for mapping
-    var xhr = new XMLHttpRequest();
-    xhr.open("POST", "/handle_mapping", true);
-    xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-    xhr.onload = function () {
-        if (xhr.status === 200) {
-            var responseData = JSON.parse(xhr.responseText);
-            // Update chat area with bot's response
-            updateBotResponse(responseData.message, false);
+    fetch('/handle_mapping', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json;charset=UTF-8'
+        },
+        body: JSON.stringify({ building: buildingName })
+    })
+    .then(response => {
+        if (response.ok) {
+            return response.json();
+        } else {
+            throw new Error('Failed to send building name to the server');
         }
-    };
-    xhr.send(JSON.stringify({ building: buildingName }));
+    })
+    .then(data => {
+        // Update chat area with bot's response
+        updateBotResponse(data.message, false);
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
 }
 
 function handleMapping() {
@@ -156,7 +166,6 @@ function handleMapping() {
     if (buildingName !== "") {
         // Send the building name to the server for mapping
         sendMappingRequest(buildingName);
-
         // Clear input field
         document.getElementById("user-input").value = "";
     } else {
@@ -246,15 +255,22 @@ function startNewChat() {
     updateAndDisplayMessage("Hello, how can I assist you?", false);
 
     // Send a POST request to clear the conversation history on the server side
-    var xhr = new XMLHttpRequest();
-    xhr.open("POST", "/clear_history", true);
-    xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-    xhr.onload = function () {
-        if (xhr.status === 200) {
-            console.log("Conversation history cleared.");
+    fetch('/clear_history', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json;charset=UTF-8'
         }
-    };
-    xhr.send();
+    })
+    .then(response => {
+        if (response.ok) {
+            console.log('Conversation history cleared.');
+        } else {
+            throw new Error('Failed to clear conversation history.');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
 }
 
 function handleKeyDown(event) {
