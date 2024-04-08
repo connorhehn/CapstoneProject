@@ -2,13 +2,21 @@ from flask import Flask, render_template, request, jsonify
 from huggingface_hub import InferenceClient
 from gtts import gTTS
 import speech_recognition as sr
+import requests
+import base64
 import os
 
 # Initialize flask
 app = Flask(__name__)
 
 # Initialize the Hugging Face model
-client = InferenceClient("mistralai/Mixtral-8x7B-Instruct-v0.1")
+HF_access_token = "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"
+client = InferenceClient(model="mistralai/Mixtral-8x7B-Instruct-v0.1",token=HF_access_token)
+
+# Spotify Initializations
+CLIENT_ID = 'f18d5f1bbc5c4f2bbdd24c33c8da38cf'
+CLIENT_SECRET = 'bc0bc31a06cd48b0aed581869d7f86f2'
+SPOTIFY_API_URL = 'https://api.spotify.com/v1/'
 
 # Pre-fill the system input
 english_system_prompt = "Please answer the questions as concisely and politely as possible. You are virtually located at Fairfield University Campus, in Fairfield, CT."
@@ -101,15 +109,61 @@ def handle_mapping():
 # Spotify Route
 @app.route('/handle_spotify', methods=['POST'])
 def handle_spotify():
-    # Get the music name from the request JSON data
+    access_token = get_access_token()
     data = request.get_json()
-    musicRequest = data.get('music')  # Convert to lowercase
+    musicRequest = data.get('song')  # Convert to lowercase
     print(musicRequest)
 
-    if (len(musicRequest) > 3):
-        return jsonify({'status': 'success', 'message': 'Now playing {music_request}'})
+    if access_token:
+        headers = {
+            'Authorization': 'Bearer {}'.format(access_token)
+        }
+        params = {
+            'q': musicRequest,
+            'type': 'track',
+            'limit': 3
+        }
+        response = requests.get(SPOTIFY_API_URL + 'search', params=params, headers=headers)
+        if response.status_code == 200:
+            data = response.json()
+            return jsonify(data['tracks']['items'])
+        else:
+            return jsonify({'status': 'Error', 'message': 'Unable to fetch serach results from spotify'})
     else:
-        return jsonify({'status': 'error', 'message': 'Invalid song or artist name.'})
+            return jsonify({'status': 'Error', 'message': 'Unable to retrieve access token'})
+
+def get_access_token():
+    auth_header = base64.b64encode((CLIENT_ID + ':' + CLIENT_SECRET).encode('utf-8')).decode('utf-8')
+    headers = {'Authorization': 'Basic {}'.format(auth_header)}
+    data = {
+        'grant_type': 'client_credentials',
+    }
+    response = requests.post('https://accounts.spotify.com/api/token', data=data, headers=headers)
+    if response.status_code == 200:
+        token_info = response.json()
+        access_token = token_info['access_token']
+        return access_token
+    else:
+        return None
+
+@app.route('/play', methods=['POST'])
+def play():
+    track_id = request.form['track_id']
+    access_token = get_access_token()
+
+    if access_token:
+        headers = {
+            'Authorization': 'Bearer {}'.format(access_token)
+        }
+        response = requests.get(SPOTIFY_API_URL + 'tracks/{}'.format(track_id), headers=headers)
+        if response.status_code == 200:
+            data = response.json()
+            preview_url = data.get('preview_url', "")
+            return jsonify({"preview_url": preview_url})
+        else:
+            return "Error: Unable to fetch track preview from Spotify API"
+    else:
+        return "Error: Unable to retrieve access token"
 
 if __name__ == '__main__':
     app.run(debug=True)
