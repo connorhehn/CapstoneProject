@@ -1,21 +1,25 @@
 from flask import Flask, render_template, request, jsonify
 from huggingface_hub import InferenceClient
 from gtts import gTTS
+from dotenv import load_dotenv
 import speech_recognition as sr
 import requests
 import base64
 import os
 
+# Load environment variables from .env file
+load_dotenv()
+
 # Initialize flask
 app = Flask(__name__)
 
 # Initialize the Hugging Face model
-HF_access_token = "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"
+HF_access_token = os.getenv("HF_ACCESS_TOKEN")
 client = InferenceClient(model="mistralai/Mixtral-8x7B-Instruct-v0.1",token=HF_access_token)
 
 # Spotify Initializations
-CLIENT_ID = 'f18d5f1bbc5c4f2bbdd24c33c8da38cf'
-CLIENT_SECRET = 'bc0bc31a06cd48b0aed581869d7f86f2'
+CLIENT_ID = os.getenv("SPOTIFY_CLIENT_ID")
+CLIENT_SECRET = os.getenv("SPOTIFY_CLIENT_SECRET")
 SPOTIFY_API_URL = 'https://api.spotify.com/v1/'
 
 # Pre-fill the system input
