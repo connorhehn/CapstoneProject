@@ -74,24 +74,29 @@ function sendSpotifyRequest(musicRequest) {
     });
 }
 function displaySpotifyResults(results) {
+    updateAndDisplayMessage("Here are the top 5 results for this query:");
     var chatList = document.querySelector(".chat");
-    // chatList.innerHTML = ''; // Clear previous results
-
     results.forEach(track => {
         var messageElement = document.createElement("li");
-        messageElement.textContent = track.name;
         messageElement.className = "message";
 
-        var button = document.createElement("button");
-        button.className = "play-btn";
-        button.dataset.id = track.id;
-        button.textContent = "Play";
-        button.addEventListener("click", play);
-        messageElement.appendChild(button);
+        // Create and append image element
+        var imageElement = document.createElement("img");
+        imageElement.src = track.image;
+        imageElement.className = "play-btn";
+        imageElement.dataset.id = track.preview_url; // Use preview URL as track ID
+        imageElement.addEventListener("click", play);
+        messageElement.appendChild(imageElement);
+
+        // Create and append text content (track name and artist)
+        var textElement = document.createElement("span");
+        textElement.textContent = track.name + ' - ' + track.artist;
+        messageElement.appendChild(textElement);
 
         chatList.appendChild(messageElement);
     });
 }
+
 function play() {
     const trackId = this.getAttribute('data-id');
     fetch('/play', {
@@ -110,6 +115,11 @@ function play() {
             audio.controls = true;
             audio.src = data.preview_url;
             player.appendChild(audio);
+            audio.play()
+            audio.addEventListener('ended', function() {
+                audio.currentTime = 0; // Reset audio to the beginning
+                audio.play(); // Restart playback
+            });
         } else {
             player.innerHTML = 'No preview available';
         }
@@ -271,6 +281,9 @@ function startNewChat() {
     .catch(error => {
         console.error('Error:', error);
     });
+    // Clear the audio player
+    const player = document.getElementById('player');
+    player.innerHTML = '';
 }
 
 function handleKeyDown(event) {
