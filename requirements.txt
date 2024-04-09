@@ -1,5 +1,5 @@
 Flask
 huggingface_hub
-gtts
-speechrecognition
+requests
+os
 gunicorn
