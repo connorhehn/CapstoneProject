@@ -2,7 +2,6 @@ from flask import Flask, render_template, request, jsonify
 from huggingface_hub import InferenceClient
 from gtts import gTTS
 from dotenv import load_dotenv
-import speech_recognition as sr
 import requests
 import base64
 import os
