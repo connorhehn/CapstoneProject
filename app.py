@@ -124,12 +124,25 @@ def handle_spotify():
         params = {
             'q': musicRequest,
             'type': 'track',
-            'limit': 3
+            'limit': 5
         }
         response = requests.get(SPOTIFY_API_URL + 'search', params=params, headers=headers)
         if response.status_code == 200:
             data = response.json()
-            return jsonify(data['tracks']['items'])
+            tracks = data['tracks']['items']  # Accessing the 'items' key of the 'tracks' dictionary
+            formatted_tracks = []
+            for track in tracks:
+                formatted_track = {
+                    'name': track['name'],
+                    'album': track['album']['name'],
+                    'artist': track['artists'][0]['name'],  # Assuming there's only one artist for simplicity
+                    'image': track['album']['images'][2]['url'],  # Using the first image
+                    'preview_url': track['id']
+                }
+                formatted_tracks.append(formatted_track)
+
+            return jsonify(formatted_tracks)
+            # return jsonify(data['tracks']['items'])
         else:
             return jsonify({'status': 'Error', 'message': 'Unable to fetch serach results from spotify'})
     else:
