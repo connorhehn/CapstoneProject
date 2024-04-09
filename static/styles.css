@@ -57,6 +57,8 @@ body {
     padding: 10px;
     margin: 10px;
     border-radius: 5px;
+    display: flex;
+    align-items: center;
 }
 .user-message {
     text-align: left;
@@ -216,4 +218,13 @@ body {
 audio {
     padding-top: 10px;
     width: 100%;
+}
+
+
+.play-btn {
+    cursor: pointer; /* Change cursor to pointer on hover */
+}
+
+.play-btn:hover {
+    filter: brightness(0.75); /* Increase brightness on hover */
 }
