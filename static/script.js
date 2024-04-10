@@ -215,6 +215,7 @@ function sendRegularMessage(userInput) {
         .then(responseData => {
             // Update bot's response
             updateBotResponse(responseData.response);
+            console.log(hasCodeSnippet(responseData.response));
         })
         .catch(error => {
             console.error('Error:', error);
@@ -225,12 +226,31 @@ function sendRegularMessage(userInput) {
     }
 }
 
+function hasCodeSnippet(message) {
+    return /\```(?:[^```]+)\```/g.test(message);
+}
+
+// Function to convert message to HTML with code blocks
+function convertMessageToHTML(message) {
+    // Check if the message contains code snippets
+    if (hasCodeSnippet(message)) {
+        // Replace triple backticks with <pre><code> and </code></pre>
+        message = message.replace(/```(.*?)```/gs, '<div class="code-wrapper"><pre><code>$1</code></pre></div>');
+    }
+    return message;
+}
+
 function updateBotResponse(botMessage) {
     // Find the loading message and replace it with the bot's response
     var loadingMessage = document.querySelector(".loading-message");
     if (loadingMessage) {
-        loadingMessage.textContent = botMessage;
-        loadingMessage.classList.remove("loading-message");
+        if (hasCodeSnippet(botMessage)){
+            loadingMessage.innerHTML = convertMessageToHTML(botMessage);
+            loadingMessage.classList.remove("loading-message");
+        } else {
+            loadingMessage.message = botMessage;
+            loadingMessage.classList.remove("loading-message");
+        }
     } else {
         // If loading message is not found, add the bot's response
         displayMessage(botMessage, false);
@@ -242,9 +262,15 @@ function displayMessage(message, isUserMessage) {
 
     // Display user's message or bot's response
     var messageElement = document.createElement("li");
-    messageElement.textContent = message;
-    messageElement.className = "message" + (isUserMessage ? " user-message" : " loading-message");
-    chatList.appendChild(messageElement);
+    if (hasCodeSnippet(message)){
+        messageElement.innerHTML = convertMessageToHTML(message);
+        messageElement.className = "message" + (isUserMessage ? " user-message" : " loading-message");
+        chatList.appendChild(messageElement);
+    } else {
+        messageElement.innerHTML = message;
+        messageElement.className = "message" + (isUserMessage ? " user-message" : " loading-message");
+        chatList.appendChild(messageElement);
+    }
 }
 
 function updateAndDisplayMessage(message, isUserMessage){

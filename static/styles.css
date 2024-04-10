@@ -228,3 +228,17 @@ audio {
 .play-btn:hover {
     filter: brightness(0.75); /* Increase brightness on hover */
 }
+
+pre {
+
+    padding: 1em;
+    margin: 0.5em 0;
+    background-color: #c6c6c6;
+    border: 1px solid #000000;
+    border-radius: 5px;
+    overflow-x: auto;
+}
+code {
+    display: inline-block;
+    white-space: pre-wrap;
+}
