@@ -248,7 +248,7 @@ function updateBotResponse(botMessage) {
             loadingMessage.innerHTML = convertMessageToHTML(botMessage);
             loadingMessage.classList.remove("loading-message");
         } else {
-            loadingMessage.message = botMessage;
+            loadingMessage.textContent = botMessage;
             loadingMessage.classList.remove("loading-message");
         }
     } else {
@@ -267,7 +267,7 @@ function displayMessage(message, isUserMessage) {
         messageElement.className = "message" + (isUserMessage ? " user-message" : " loading-message");
         chatList.appendChild(messageElement);
     } else {
-        messageElement.innerHTML = message;
+        messageElement.textContent = message;
         messageElement.className = "message" + (isUserMessage ? " user-message" : " loading-message");
         chatList.appendChild(messageElement);
     }
