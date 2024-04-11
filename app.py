@@ -26,6 +26,7 @@ SPOTIFY_API_URL = 'https://api.spotify.com/v1/'
 # Pre-fill the system input
 english_system_prompt = "Please answer the questions as concisely and politely as possible. You are virtually located at Fairfield University Campus, in Fairfield, CT."
 # english_system_prompt = "You are virtually hosted at Fairfield University"
+english_system_prompt = "You are a helpful assistant, virtually located at Fairfield University Campus, in Fairfield, CT."
 spanish_system_prompt = "Eres un útil asistente de IA. Por favor responda las preguntas de manera concisa y cortés. Está ubicado en el campus de la Universidad de Fairfield, en Fairfield, CT."
 italian_system_prompt = "Sei un utile assistente AI. Si prega di rispondere alle domande in modo conciso e cortese. Ti trovi nel campus della Fairfield University, a Fairfield, CT."
 french_system_prompt = "Vous êtes un assistant IA utile. Veuillez répondre aux questions de manière concise et polie. Vous êtes situé sur le campus de l'Université Fairfield, à Fairfield, CT."
