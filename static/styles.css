@@ -57,8 +57,18 @@ body {
     padding: 10px;
     margin: 10px;
     border-radius: 5px;
+    /* display: flex; */
+    /* align-items: center; */
+    white-space: pre-wrap;
+}
+.message-music {
+    background-color: #f1f1f1;
+    padding: 10px;
+    margin: 10px;
+    border-radius: 5px;
     display: flex;
     align-items: center;
+    white-space: pre-wrap;
 }
 .user-message {
     text-align: left;
@@ -230,7 +240,6 @@ audio {
 }
 
 pre {
-
     padding: 1em;
     margin: 0.5em 0;
     background-color: #c6c6c6;
@@ -239,6 +248,27 @@ pre {
     overflow-x: auto;
 }
 code {
-    display: inline-block;
+    display: block;
     white-space: pre-wrap;
+}
+
+li.message iframe {
+    width: 100%;
+    height: 60vh;
+}
+
+.location-dropdown {
+    width: 55%; /* Same width as the sidebar */
+    height: 2em;
+    border: none;
+    background-color: lightslategray;
+    color: white;
+    border-radius: 5px;
+    text-align: center;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.location-dropdown:hover {
+    background-color: #51a6b1;
 }
