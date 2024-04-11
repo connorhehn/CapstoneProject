@@ -244,9 +244,12 @@ function displayMap(responseData){
     var chatList = document.querySelector(".chat");
     var messageElement = document.createElement("li");
     messageElement.className = "message";
-    var mapElement = document.createElement("iframe");
-    mapElement.src = responseData.map_filename;
-    messageElement.appendChild(mapElement);
+
+    var mapContainer = document.createElement("iframe");
+    mapContainer.srcdoc = responseData.map_html
+    // var mapElement = document.createElement("iframe");
+    // mapElement.innerHTML = responseData.map_html;
+    messageElement.appendChild(mapContainer);
     chatList.appendChild(messageElement);
 }
 

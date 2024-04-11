@@ -190,8 +190,11 @@ def handle_mapping():
             folium.PolyLine(decoded_polyline, color='blue', weight=5, opacity=0.7).add_to(map_obj)
 
             # Save the map to a temporary HTML file
-            map_filename = 'static/map.html'
-            map_obj.save(map_filename)
+            # map_filename = 'static/map.html'
+            # map_obj.save(map_filename)
+            map_html = map_obj.get_root().render()
+            print(map_html)
+
 
             # Initialize the message variable
             routeMessage = ''
@@ -216,7 +219,7 @@ def handle_mapping():
                 # Append the step to the message
                 routeMessage += f'{i}. {step["text"]} ({distance_step})\n'
 
-            return jsonify({'message': routeMessage, 'map_filename': map_filename})
+            return jsonify({'message': routeMessage, 'map_html': map_html})
         else:
             return jsonify({'error': f'Routing Error: {response.status_code}, {response.text}'}), 500
     else:
