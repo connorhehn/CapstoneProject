@@ -1,5 +1,6 @@
 let mapEnabled = false; // Flag to track if mapping is enabled
 let spotifyEnabled = false; // Flag to track if spotify is enabled
+startNewChat();
 
 function sendMessage() {
     // Hide sample questions buttons
@@ -132,19 +133,25 @@ function toggleMap() {
     updateButtons(spotifyEnabled,mapEnabled)
     // Display message in the chat area based on the state
     if (mapEnabled) {
-        addLocationDropDown("start_location", false);
-        addLocationDropDown("end_location", false);
+        addLocationDropDown("start_location", false, "Select Starting Location: ");
+        addLocationDropDown("end_location", false, "Select Ending Location: ");
     } else {
         updateAndDisplayMessage("Mapping turned off.", false);
     }
 }
-function addLocationDropDown(idAndName, isUserMessage) {
+function addLocationDropDown(idAndName, isUserMessage, location_string) {
     var chatList = document.querySelector(".chat");
+
+    // Create message element
     var messageElement = document.createElement("li");
     messageElement.className = "message";
+
+    // Create label for the drop down menu
     var dropdownLabel = document.createElement("label");
     dropdownLabel.setAttribute("for", idAndName);
-    dropdownLabel.textContent = "Select " + idAndName + " Location: ";
+    dropdownLabel.textContent = location_string;
+
+    // Add elements to the html
     messageElement.appendChild(dropdownLabel);
     chatList.appendChild(messageElement);
 
@@ -231,7 +238,6 @@ function handleMapping() {
         console.log("Attempting to display results");
         toggleMap();
         clearChat();
-        // TODO: add walking and distance metrics
         console.log(responseData.message);
         displayMessage(responseData.message, false);
         displayMap(responseData);
@@ -305,24 +311,6 @@ function convertMessageToHTML(message) {
         // Replace triple backticks with <pre><code> and </code></pre>
         message = message.replace(/```(.*?)```/gs, '<div class="code-wrapper"><pre><code>$1</code></pre></div>');
         return message
-        // Split the message into parts before and after the code snippet
-        // var parts = message.split(/```(.*?)```/gs);
-        // var html = '';
-
-        // // Loop through the parts and format them accordingly
-        // for (var i = 0; i < parts.length; i++) {
-        //     // Alternate between text and code snippet parts
-        //     if (i % 2 === 0) {
-        //         // Text before or after the code snippet
-        //         html += '<div class="text">' + parts[i] + '</div>';
-        //     } else {
-        //         // Code snippet
-        //         html += '<div class="code-wrapper"><pre><code>' + parts[i] + '</code></pre></div>';
-        //     }
-        // }
-
-        // Return the formatted HTML
-        // return html;
     } else {
         return message
     }
@@ -332,14 +320,8 @@ function updateBotResponse(botMessage) {
     // Find the loading message and replace it with the bot's response
     var loadingMessage = document.querySelector(".loading-message");
     if (loadingMessage) {
-        if (hasCodeSnippet(botMessage)){
-            // TODO: Need to fix how the code displays
-            loadingMessage.innerHTML = convertMessageToHTML(botMessage);
-            loadingMessage.classList.remove("loading-message");
-        } else {
-            loadingMessage.innerHTML = botMessage.trim();
-            loadingMessage.classList.remove("loading-message");
-        }
+        loadingMessage.innerHTML = botMessage.trim();
+        loadingMessage.classList.remove("loading-message");
     } else {
         // If loading message is not found, add the bot's response
         displayMessage(botMessage, false);
