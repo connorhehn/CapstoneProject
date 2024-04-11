@@ -2,20 +2,16 @@ let mapEnabled = false; // Flag to track if mapping is enabled
 let spotifyEnabled = false; // Flag to track if spotify is enabled
 
 function sendMessage() {
-    // Get user input
-    var userInput = document.getElementById("user-input").value.trim();
+    // Hide sample questions buttons
     hideAdditionalButtons();
 
+    // Determine route based on Map and Spotify flags
     if (mapEnabled) {
         // If mapping is enabled, handle mapping functionality
-        if (userInput !== "") {
-            // Pass user input to Python Flask for processing
-            sendMappingRequest(userInput);
-        } else {
-            updateAndDisplayMessage("Please enter a building in the textbox below.", false);
-        }
+        handleMapping()
     } else if (spotifyEnabled) {
         // If spotify is enabled, handle spotify functionality
+        var userInput = document.getElementById("user-input").value.trim();
         if (userInput !== "") {
             // Pass user input to Python Flask for processing
             sendSpotifyRequest(userInput);
@@ -23,6 +19,7 @@ function sendMessage() {
             updateAndDisplayMessage("Please enter a song title or artist.", false);
         }
     } else {
+        var userInput = document.getElementById("user-input").value.trim();
         sendRegularMessage(userInput)
     }
     // Clear input field
@@ -30,7 +27,7 @@ function sendMessage() {
 }
 
 
-// ------------------------------ Spotify ------------------------------
+// ============================== Spotify ==============================
 function toggleSpotify(){
     hideAdditionalButtons();
     spotifyEnabled = !spotifyEnabled
@@ -67,7 +64,7 @@ function sendSpotifyRequest(musicRequest) {
     .then(responseData => {
         // Update bot's response
         displaySpotifyResults(responseData)
-        console.log("attempting to display results");
+        console.log("Attempting to display results");
     })
     .catch(error => {
         console.error('Error:', error);
@@ -127,7 +124,7 @@ function play() {
 }
 
 
-// ------------------------------ Mapping ------------------------------
+// ============================== Mapping ==============================
 function toggleMap() {
     hideAdditionalButtons();
     mapEnabled = !mapEnabled; // Toggle the flag
@@ -135,57 +132,126 @@ function toggleMap() {
     updateButtons(spotifyEnabled,mapEnabled)
     // Display message in the chat area based on the state
     if (mapEnabled) {
-        updateAndDisplayMessage("Please enter the starting location.", false);
+        addLocationDropDown("start_location", false);
+        addLocationDropDown("end_location", false);
     } else {
         updateAndDisplayMessage("Mapping turned off.", false);
     }
 }
+function addLocationDropDown(idAndName, isUserMessage) {
+    var chatList = document.querySelector(".chat");
+    var messageElement = document.createElement("li");
+    messageElement.className = "message";
+    var dropdownLabel = document.createElement("label");
+    dropdownLabel.setAttribute("for", idAndName);
+    dropdownLabel.textContent = "Select " + idAndName + " Location: ";
+    messageElement.appendChild(dropdownLabel);
+    chatList.appendChild(messageElement);
 
-function sendMappingRequest(buildingName) {
-    // Display user's message immediately
-    displayMessage(buildingName, true);
-    // Display loading message for bot response
-    displayMessage("...", false);
+    var dropdown = document.createElement("select");
+    dropdown.setAttribute("id", idAndName);
+    dropdown.setAttribute("name", idAndName);
+    dropdown.className = "location-dropdown";
 
-    // Send the building name to the server for mapping
+    var locations = [
+        "42 Langguth Road, West Langguth Road, 06824 Fairfield, Connecticut, United States",
+        "Aloysius P. Kelley Center, Loyola Drive, 06824 Fairfield, United States",
+        "Alumni Hall Sports Arena, Leeber Road, 06824 Fairfield, Connecticut, United States",
+        "Alumni House, Stonkas Road, 06824 Fairfield, United States",
+        "Alumni Softball Field, McCormick Road, 06824 Fairfield, United States",
+        "Barlow Field, Barlow Road, 06824 Fairfield, United States",
+        "Barone Campus Center, Loyola Drive, 06824 Fairfield, United States",
+        "Bellarmine Hall, Fitzgerald Way, 06824 Fairfield, United States",
+        "Campion Hall, McCormick Road, 06824 Fairfield, United States",
+        "Canisius Hall, East Langguth Road, 06824 Fairfield, Connecticut, United States",
+        "Center for Nursing and Health Studies, McInnes Road, 06824 Fairfield, United States",
+        "Charles F Dolan School of Business, Bellarmine Road, 06824 Fairfield, CT, United States",
+        "Claver Hall, Mahan Road, 06824 Fairfield, United States",
+        "Conference Center at Fairfield University, Walters Way, 06824 Fairfield, United States",
+        "David J Dolan House, Mooney Road, 06824 Fairfield, CT, United States",
+        "DiMenna-Nyselius Library, McInnes Road, 06824 Fairfield, United States",
+        "Donnarumma Hall, East Langguth Road, 06824 Fairfield, Connecticut, United States",
+        "Egan Chapel of Saint Ignatius Loyola, Bellarmine Road, 06824 Fairfield, United States",
+        "Faber Hall, Bellarmine Road, 06824 Fairfield, United States",
+        "Gonzaga Hall, East Langguth Road, 06824 Fairfield, Connecticut, United States",
+        "Jesuit Community Center, Bellarmine Road, 06824 Fairfield, United States",
+        "Jogues Hall, McCormick Road, 06824 Fairfield, United States",
+        "John C. Dolan Hall, Mooney Road, 06824 Fairfield, CT, United States",
+        "Kelley Center Parking Garage, Leeber Road, 06824 Fairfield, Connecticut, United States",
+        "Kostka Hall, Mahan Road, 06824 Fairfield, United States",
+        "Lessing Field, Leeber Road, 06824 Fairfield, Connecticut, United States",
+        "Loyola Hall, McCormick Road, 06824 Fairfield, United States",
+        "Mahan Road, 06824 Fairfield, United States",
+        "McAuliffe Hall, Ross Road, 06824 Fairfield, United States",
+        "McCormick Road, 06824 Fairfield, United States",
+        "Meditz Hall, McInnes Road, 06824 Fairfield, United States",
+        "Rafferty Stadium, Lynch Road, 06824 Fairfield, United States",
+        "Regina A Quick Center for the Arts, McInnes Road, 06824 Fairfield, CT, United States",
+        "Regis Hall, East Langguth Road, 06824 Fairfield, Connecticut, United States",
+        "Rudolph F. Bannow Science Center, McInnes Road, 06824 Fairfield, United States",
+        "Student Townhouse Complex, Lynch Road, 06824 Fairfield, CT, United States",
+        "The Levee, Lynch Road, 06824 Fairfield, CT, United States",
+        "University Field, Leeber Road, 06824 Fairfield, Connecticut, United States",
+        "Walsh Athletic Center, Lynch Road, 06824 Fairfield, United States"
+    ];
+
+    locations.forEach(function(location) {
+        var option = document.createElement("option");
+        option.setAttribute("value", location);
+        option.textContent = location;
+        dropdown.appendChild(option);
+    });
+    messageElement.appendChild(dropdown);
+}
+
+function handleMapping() {
+    var start_location = document.getElementById("start_location").value
+    var end_location = document.getElementById("end_location").value
+    // Create an object with the data
+    var data = {
+        start_location: start_location,
+        end_location: end_location
+    };
     fetch('/handle_mapping', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json;charset=UTF-8'
         },
-        body: JSON.stringify({ building: buildingName })
+        body: JSON.stringify(data) // Pass the data object
     })
     .then(response => {
         if (response.ok) {
             return response.json();
         } else {
-            throw new Error('Failed to send building name to the server');
+            throw new Error('Network response was not ok.');
         }
     })
-    .then(data => {
-        // Update chat area with bot's response
-        updateBotResponse(data.message, false);
+    .then(responseData => {
+        // Update bot's response
+        console.log("Attempting to display results");
+        toggleMap();
+        clearChat();
+        // TODO: add walking and distance metrics
+        console.log(responseData.message);
+        displayMessage(responseData.message, false);
+        displayMap(responseData);
     })
     .catch(error => {
         console.error('Error:', error);
     });
 }
-
-function handleMapping() {
-    var buildingName = document.getElementById("user-input").value.trim();
-    if (buildingName !== "") {
-        // Send the building name to the server for mapping
-        sendMappingRequest(buildingName);
-        // Clear input field
-        document.getElementById("user-input").value = "";
-    } else {
-        // Display an error message if the input is empty
-        displayMessage("Please enter a building name.", false);
-    }
+function displayMap(responseData){
+    var chatList = document.querySelector(".chat");
+    var messageElement = document.createElement("li");
+    messageElement.className = "message";
+    var mapElement = document.createElement("iframe");
+    mapElement.src = responseData.map_filename;
+    messageElement.appendChild(mapElement);
+    chatList.appendChild(messageElement);
 }
 
 
-// ------------------------------ Chatbot ------------------------------
+// ============================== Chatbot ==============================
 function sendRegularMessage(userInput) {
     var languageSelect = document.getElementById("language-select");
     var selectedLanguage = languageSelect.value;
@@ -215,7 +281,6 @@ function sendRegularMessage(userInput) {
         .then(responseData => {
             // Update bot's response
             updateBotResponse(responseData.response);
-            console.log(hasCodeSnippet(responseData.response));
         })
         .catch(error => {
             console.error('Error:', error);
@@ -279,15 +344,14 @@ function updateAndDisplayMessage(message, isUserMessage){
 }
 
 
-// ------------------------------ New Chat ------------------------------
+// ============================== New Chat ==============================
 function startNewChat() {
     mapEnabled = false;
     spotifyEnabled = false;
     showAdditionalButtons();
     updateButtons(spotifyEnabled,mapEnabled);
     // Clear chat history on the client side
-    var chatList = document.querySelector(".chat");
-    chatList.innerHTML = '';
+    clearChat();
     updateAndDisplayMessage("Hello, how can I assist you?", false);
 
     // Send a POST request to clear the conversation history on the server side
@@ -311,6 +375,10 @@ function startNewChat() {
     const player = document.getElementById('player');
     player.innerHTML = '';
 }
+function clearChat(){
+    var chatList = document.querySelector(".chat");
+    chatList.innerHTML = '';
+}
 
 function handleKeyDown(event) {
     if (event.key === "Enter") {
@@ -320,7 +388,7 @@ function handleKeyDown(event) {
 }
 
 
-// ------------------------------ Speech Recognition ------------------------------
+// ============================== Speech Recognition ==============================
 function startSpeechRecognition() {
     var recognition = new window.webkitSpeechRecognition(); // Create a new SpeechRecognition object
 
@@ -368,7 +436,7 @@ function addInstructions() {
 }
 
 
-// ------------------------------ Buttons ------------------------------
+// ============================== Buttons ==============================
 // Function to update the spotify and map buttons
 function updateButtons(spotifyEnabled,mapEnabled) {
     // Update spotify button
