@@ -34,8 +34,35 @@ german_system_prompt = "Sie sind ein hilfreicher KI-Assistent. Bitte beantworten
 # Initialize conversation history
 conversation_history = []
 
-# List of valid buildings (replace with your actual data)
-valid_buildings = ["Building A", "Building B", "Building C"]
+
+# =================================== Global Functions =================================== #
+def geocode_location(api_key, location):
+    # Geocode location using GraphHopper Geocoding API
+    geocoding_url = f'https://graphhopper.com/api/1/geocode?q={location}&key={api_key}'
+    response = requests.get(geocoding_url)
+
+    if response.status_code == 200:
+        data = response.json()
+        # Extract the coordinates from the geocoding response
+        coordinates = [data["hits"][0]["point"]["lat"], data["hits"][0]["point"]["lng"]]
+        return coordinates
+    else:
+        print(f'Geocoding Error: {response.status_code}, {response.text}')
+        return None
+
+def get_access_token():
+    auth_header = base64.b64encode((CLIENT_ID + ':' + CLIENT_SECRET).encode('utf-8')).decode('utf-8')
+    headers = {'Authorization': 'Basic {}'.format(auth_header)}
+    data = {
+        'grant_type': 'client_credentials',
+    }
+    response = requests.post('https://accounts.spotify.com/api/token', data=data, headers=headers)
+    if response.status_code == 200:
+        token_info = response.json()
+        access_token = token_info['access_token']
+        return access_token
+    else:
+        return None
 
 def format_prompt(message, history):
     prompt = "<s>"
@@ -100,21 +127,100 @@ def clear_history():
 # Mapping Route
 @app.route('/handle_mapping', methods=['POST'])
 def handle_mapping():
-    # Get the building name from the request JSON data
-    data = request.get_json()
-    building_name = data.get('building').lower()  # Convert to lowercase
-    print(building_name)
+    data = request.json
+    start_location = data.get("start_location")
+    end_location = data.get("end_location")
+    print(f"start {start_location}")
+    print(f"end: {end_location}")
 
-    # Convert valid building names to lowercase for case-insensitive comparison
-    valid_buildings_lower = [building.lower() for building in valid_buildings]
+    # Replace 'YOUR_API_KEY' with your actual GraphHopper API key
+    api_key = 'f70a4563-ed75-45cb-965c-7d92054db22c'
+    base_url = 'https://graphhopper.com/api/1/'
 
-    # Validate the building name
-    if building_name in valid_buildings_lower:
-        # Building name is valid, prompt for ending location or perform further logic
-        return jsonify({'status': 'success', 'message': 'Please enter the ending location.'})
+    # Geocode start and end locations
+    start_coordinates = geocode_location(api_key, start_location)
+    end_coordinates = geocode_location(api_key, end_location)
+
+    if start_coordinates and end_coordinates:
+        routing_url = f'{base_url}route?point={start_coordinates[0]},{start_coordinates[1]}&point={end_coordinates[0]},{end_coordinates[1]}&vehicle=foot&key={api_key}'
+
+        response = requests.get(routing_url)
+
+        if response.status_code == 200:
+            data = response.json()
+
+            # Extract relevant information from the response
+            distance_meters = data['paths'][0]['distance']
+            time_milliseconds = data['paths'][0]['time']
+
+            # Convert distance to miles (1 meter = 0.000621371 miles)
+            distance_miles = distance_meters * 0.000621371
+
+            # Convert time to hours and minutes
+            total_time_seconds = time_milliseconds / 1000
+            total_time_hours = int(total_time_seconds // 3600)
+            total_time_minutes = int((total_time_seconds % 3600) // 60)
+
+            # Check if the total distance is under 0.2 miles and display in feet
+            if distance_miles < 0.2:
+                distance = f'{distance_miles * 5280:.2f} feet'
+            else:
+                distance = f'{distance_miles:.2f} miles'
+
+            # Print total time with hours and minutes only if not 0
+            if total_time_hours > 0:
+                total_time = f'{total_time_hours} hours and {total_time_minutes} minutes'
+            else:
+                total_time = f'{total_time_minutes} minutes'
+
+            # Extract polyline data
+            polyline_data = data['paths'][0]['points']
+
+            # Decode polyline into list of coordinates
+            decoded_polyline = polyline.decode(polyline_data)
+
+            # Create a folium map
+            map_obj = folium.Map(location=[start_coordinates[0], start_coordinates[1]], zoom_start=14)
+
+            # Add markers for start and end locations with different colors
+            folium.Marker(location=[start_coordinates[0], start_coordinates[1]], popup='Start', icon=folium.Icon(color='green')).add_to(map_obj)
+            folium.Marker(location=[end_coordinates[0], end_coordinates[1]], popup='End', icon=folium.Icon(color='red')).add_to(map_obj)
+
+            # Add a PolyLine to trace the route
+            folium.PolyLine(decoded_polyline, color='blue', weight=5, opacity=0.7).add_to(map_obj)
+
+            # Save the map to a temporary HTML file
+            map_filename = 'static/map.html'
+            map_obj.save(map_filename)
+
+            # Initialize the message variable
+            routeMessage = ''
+
+            # Add total distance and total time to the message
+            routeMessage += f'Starting Location: {start_location}\n'
+            routeMessage += f'Ending Location: {end_location}\n\n'
+            routeMessage += f'Total Distance: {distance}\n'
+            routeMessage += f'Total Time: {total_time}\n\n'
+
+            # Add directions to the message
+            routeMessage += 'Directions:\n'
+            for i, step in enumerate(data['paths'][0]['instructions'], start=1):
+                distance_step_meters = step["distance"]
+                distance_step_miles = distance_step_meters * 0.000621371
+
+                # Check if the distance for the step is under 0.2 miles and display in feet
+                if distance_step_miles < 0.2:
+                    distance_step = f'{distance_step_miles * 5280:.2f} feet'
+                else:
+                    distance_step = f'{distance_step_miles:.2f} miles'
+                # Append the step to the message
+                routeMessage += f'{i}. {step["text"]} ({distance_step})\n'
+
+            return jsonify({'message': routeMessage, 'map_filename': map_filename})
+        else:
+            return jsonify({'error': f'Routing Error: {response.status_code}, {response.text}'}), 500
     else:
-        # Building name is not valid, send an error message
-        return jsonify({'status': 'error', 'message': 'Invalid building name.'})
+        return jsonify({'error': 'Geocoding failed. Check your input locations.'}), 400
 
 
 # Spotify Route
@@ -156,20 +262,7 @@ def handle_spotify():
     else:
             return jsonify({'status': 'Error', 'message': 'Unable to retrieve access token'})
 
-def get_access_token():
-    auth_header = base64.b64encode((CLIENT_ID + ':' + CLIENT_SECRET).encode('utf-8')).decode('utf-8')
-    headers = {'Authorization': 'Basic {}'.format(auth_header)}
-    data = {
-        'grant_type': 'client_credentials',
-    }
-    response = requests.post('https://accounts.spotify.com/api/token', data=data, headers=headers)
-    if response.status_code == 200:
-        token_info = response.json()
-        access_token = token_info['access_token']
-        return access_token
-    else:
-        return None
-
+# Play Music Route
 @app.route('/play', methods=['POST'])
 def play():
     track_id = request.form['track_id']
