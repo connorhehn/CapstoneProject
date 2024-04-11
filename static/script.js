@@ -75,7 +75,7 @@ function displaySpotifyResults(results) {
     var chatList = document.querySelector(".chat");
     results.forEach(track => {
         var messageElement = document.createElement("li");
-        messageElement.className = "message";
+        messageElement.className = "message-music";
 
         // Create and append image element
         var imageElement = document.createElement("img");
@@ -301,8 +301,28 @@ function convertMessageToHTML(message) {
     if (hasCodeSnippet(message)) {
         // Replace triple backticks with <pre><code> and </code></pre>
         message = message.replace(/```(.*?)```/gs, '<div class="code-wrapper"><pre><code>$1</code></pre></div>');
+        return message
+        // Split the message into parts before and after the code snippet
+        // var parts = message.split(/```(.*?)```/gs);
+        // var html = '';
+
+        // // Loop through the parts and format them accordingly
+        // for (var i = 0; i < parts.length; i++) {
+        //     // Alternate between text and code snippet parts
+        //     if (i % 2 === 0) {
+        //         // Text before or after the code snippet
+        //         html += '<div class="text">' + parts[i] + '</div>';
+        //     } else {
+        //         // Code snippet
+        //         html += '<div class="code-wrapper"><pre><code>' + parts[i] + '</code></pre></div>';
+        //     }
+        // }
+
+        // Return the formatted HTML
+        // return html;
+    } else {
+        return message
     }
-    return message;
 }
 
 function updateBotResponse(botMessage) {
@@ -310,10 +330,11 @@ function updateBotResponse(botMessage) {
     var loadingMessage = document.querySelector(".loading-message");
     if (loadingMessage) {
         if (hasCodeSnippet(botMessage)){
+            // TODO: Need to fix how the code displays
             loadingMessage.innerHTML = convertMessageToHTML(botMessage);
             loadingMessage.classList.remove("loading-message");
         } else {
-            loadingMessage.textContent = botMessage;
+            loadingMessage.innerHTML = botMessage.trim();
             loadingMessage.classList.remove("loading-message");
         }
     } else {
@@ -332,7 +353,7 @@ function displayMessage(message, isUserMessage) {
         messageElement.className = "message" + (isUserMessage ? " user-message" : " loading-message");
         chatList.appendChild(messageElement);
     } else {
-        messageElement.textContent = message;
+        messageElement.innerHTML = message;
         messageElement.className = "message" + (isUserMessage ? " user-message" : " loading-message");
         chatList.appendChild(messageElement);
     }
@@ -416,22 +437,17 @@ function startSpeechRecognition() {
     recognition.start(); // Start speech recognition
 }
 
-// ------------------------------ Instructions ------------------------------
-const instruct1 = "Start Conversation: Type your message in the text box and press 'Send' to start a conversation with the chatbot."
-const instruct2 = "Voice Input: Click 'Record Speech' to speak instead of typing. The chatbot will transcribe and respond to your voice message."
-const instruct3 = "Language Selection: Use the dropdown menu to select your preferred language for communication with the chatbot."
-const instruct4 = "New Chat: Click 'New Chat' to start a new conversation and clear the chat history."
-const instruct5 = "Spotify: Click the spotify button to toggle functionality"
-const instruct6 = "Map: Click the map button to toggle mapping functionality"
+// ============================== Instructions ==============================
+const instructions = `Start Conversation: Type your message in the text box and press 'Send' to start a conversation with the chatbot.\n
+Voice Input: Click 'Record Speech' to speak instead of typing. The chatbot will transcribe and respond to your voice message. \n
+Language Selection: Use the dropdown menu to select your preferred language for communication with the chatbot. \n
+New Chat: Click 'New Chat' to start a new conversation and clear the chat history. \n
+Spotify: Click the spotify button to toggle functionality \n
+Map: Click the map button to toggle mapping functionality\n`
 // Function to display the instructions
 function addInstructions() {
     startNewChat();
-    updateAndDisplayMessage(instruct1,false);
-    updateAndDisplayMessage(instruct2,false);
-    updateAndDisplayMessage(instruct3,false);
-    updateAndDisplayMessage(instruct4,false);
-    updateAndDisplayMessage(instruct5,false);
-    updateAndDisplayMessage(instruct6,false);
+    updateAndDisplayMessage(instructions,false);
     hideAdditionalButtons();
 }
 
