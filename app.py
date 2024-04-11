@@ -1,11 +1,13 @@
 from flask import Flask, render_template, request, jsonify
 from huggingface_hub import InferenceClient
-from gtts import gTTS
 from dotenv import load_dotenv
 import requests
+import folium
+import polyline
 import base64
 import os
 
+# =================================== Initializations =================================== #
 # Load environment variables from .env file
 load_dotenv()
 
@@ -13,8 +15,8 @@ load_dotenv()
 app = Flask(__name__)
 
 # Initialize the Hugging Face model
-HF_access_token = os.getenv("HF_ACCESS_TOKEN")
-client = InferenceClient(model="mistralai/Mixtral-8x7B-Instruct-v0.1",token=HF_access_token)
+HF_ACESS_TOKEN = os.getenv("HF_ACCESS_TOKEN")
+client = InferenceClient(model="mistralai/Mixtral-8x7B-Instruct-v0.1",token=HF_ACESS_TOKEN)
 
 # Spotify Initializations
 CLIENT_ID = os.getenv("SPOTIFY_CLIENT_ID")
@@ -56,6 +58,8 @@ def generate_output(prompt, history, system_prompt):
     output = client.text_generation(formatted_prompt, **generate_kwargs)
     return output
 
+
+# =================================== Flask Routes =================================== #
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -82,11 +86,15 @@ def process_message():
     conversation_history.append((user_input, bot_response))
     return jsonify({'response': bot_response})
 
-# Clear Conversation History
+# Clear Conversation History Route
 @app.route('/clear_history', methods=['POST'])
 def clear_history():
     global conversation_history
     conversation_history = []
+    try:
+        os.remove("static/map.html")
+    except:
+        pass
     return jsonify({'success': True})
 
 # Mapping Route
