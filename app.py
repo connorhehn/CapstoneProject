@@ -118,10 +118,6 @@ def process_message():
 def clear_history():
     global conversation_history
     conversation_history = []
-    try:
-        os.remove("static/map.html")
-    except:
-        pass
     return jsonify({'success': True})
 
 # Mapping Route
@@ -190,11 +186,7 @@ def handle_mapping():
             folium.PolyLine(decoded_polyline, color='blue', weight=5, opacity=0.7).add_to(map_obj)
 
             # Save the map to a temporary HTML file
-            # map_filename = 'static/map.html'
-            # map_obj.save(map_filename)
             map_html = map_obj.get_root().render()
-            print(map_html)
-
 
             # Initialize the message variable
             routeMessage = ''
