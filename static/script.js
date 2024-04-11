@@ -320,7 +320,7 @@ function updateBotResponse(botMessage) {
     // Find the loading message and replace it with the bot's response
     var loadingMessage = document.querySelector(".loading-message");
     if (loadingMessage) {
-        loadingMessage.innerHTML = botMessage.trim();
+        loadingMessage.innerHTML = convertMessageToHTML(botMessage.trim());
         loadingMessage.classList.remove("loading-message");
     } else {
         // If loading message is not found, add the bot's response
