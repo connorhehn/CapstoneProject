@@ -3,12 +3,13 @@ body {
     margin: 0;
     padding: 0;
 }
-.container {
+.layout {
     display: flex;
     height: 100vh;
 }
 /* CSS styles for the sidebar */
 .sidebar {
+    grid-area: sidebar;
     width: 15%;
     background-color: #f1f1f1; /* Adjust as needed */
     padding: 20px; /* Add padding around the sidebar */
@@ -271,4 +272,32 @@ li.message iframe {
 
 .location-dropdown:hover {
     background-color: #51a6b1;
+}
+
+
+/* CSS styles for smaller screens */
+@media (max-width: 1000px) {
+    .layout {
+        display: grid;
+        grid-template-rows: auto; /* Define one row */
+        grid-template-columns: auto; /* Define one column */
+        grid-template-areas:
+            'sidebar'
+            'main';
+        height: auto;
+        overflow-y: scroll;
+        width: 100%;
+    }
+
+    .sidebar {
+        grid-area: sidebar; /* Place the sidebar in its defined area */
+        width: auto;
+        height: auto;
+        overflow-y: auto; /* Enable vertical scrolling for the sidebar if needed */
+    }
+
+    .main {
+        grid-area: main; /* Place the main content in its defined area */
+        overflow-y: auto; /* Enable vertical scrolling for the main content if needed */
+    }
 }
