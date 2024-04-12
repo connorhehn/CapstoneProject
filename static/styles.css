@@ -258,7 +258,7 @@ li.message iframe {
 }
 
 .location-dropdown {
-    width: 55%; /* Same width as the sidebar */
+    width: auto; /* Same width as the sidebar */
     height: 2em;
     border: none;
     background-color: lightslategray;
