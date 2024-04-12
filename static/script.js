@@ -160,52 +160,52 @@ function addLocationDropDown(idAndName, isUserMessage, location_string) {
     dropdown.setAttribute("name", idAndName);
     dropdown.className = "location-dropdown";
 
-    var locations = [
-        "42 Langguth Road, West Langguth Road, 06824 Fairfield, Connecticut, United States",
-        "Aloysius P. Kelley Center, Loyola Drive, 06824 Fairfield, United States",
-        "Alumni Hall Sports Arena, Leeber Road, 06824 Fairfield, Connecticut, United States",
-        "Alumni House, Stonkas Road, 06824 Fairfield, United States",
-        "Alumni Softball Field, McCormick Road, 06824 Fairfield, United States",
-        "Barlow Field, Barlow Road, 06824 Fairfield, United States",
-        "Barone Campus Center, Loyola Drive, 06824 Fairfield, United States",
-        "Bellarmine Hall, Fitzgerald Way, 06824 Fairfield, United States",
-        "Campion Hall, McCormick Road, 06824 Fairfield, United States",
-        "Canisius Hall, East Langguth Road, 06824 Fairfield, Connecticut, United States",
-        "Center for Nursing and Health Studies, McInnes Road, 06824 Fairfield, United States",
-        "Charles F Dolan School of Business, Bellarmine Road, 06824 Fairfield, CT, United States",
-        "Claver Hall, Mahan Road, 06824 Fairfield, United States",
-        "Conference Center at Fairfield University, Walters Way, 06824 Fairfield, United States",
-        "David J Dolan House, Mooney Road, 06824 Fairfield, CT, United States",
-        "DiMenna-Nyselius Library, McInnes Road, 06824 Fairfield, United States",
-        "Donnarumma Hall, East Langguth Road, 06824 Fairfield, Connecticut, United States",
-        "Egan Chapel of Saint Ignatius Loyola, Bellarmine Road, 06824 Fairfield, United States",
-        "Faber Hall, Bellarmine Road, 06824 Fairfield, United States",
-        "Gonzaga Hall, East Langguth Road, 06824 Fairfield, Connecticut, United States",
-        "Jesuit Community Center, Bellarmine Road, 06824 Fairfield, United States",
-        "Jogues Hall, McCormick Road, 06824 Fairfield, United States",
-        "John C. Dolan Hall, Mooney Road, 06824 Fairfield, CT, United States",
-        "Kelley Center Parking Garage, Leeber Road, 06824 Fairfield, Connecticut, United States",
-        "Kostka Hall, Mahan Road, 06824 Fairfield, United States",
-        "Lessing Field, Leeber Road, 06824 Fairfield, Connecticut, United States",
-        "Loyola Hall, McCormick Road, 06824 Fairfield, United States",
-        "Mahan Road, 06824 Fairfield, United States",
-        "McAuliffe Hall, Ross Road, 06824 Fairfield, United States",
-        "McCormick Road, 06824 Fairfield, United States",
-        "Meditz Hall, McInnes Road, 06824 Fairfield, United States",
-        "Rafferty Stadium, Lynch Road, 06824 Fairfield, United States",
-        "Regina A Quick Center for the Arts, McInnes Road, 06824 Fairfield, CT, United States",
-        "Regis Hall, East Langguth Road, 06824 Fairfield, Connecticut, United States",
-        "Rudolph F. Bannow Science Center, McInnes Road, 06824 Fairfield, United States",
-        "Student Townhouse Complex, Lynch Road, 06824 Fairfield, CT, United States",
-        "The Levee, Lynch Road, 06824 Fairfield, CT, United States",
-        "University Field, Leeber Road, 06824 Fairfield, Connecticut, United States",
-        "Walsh Athletic Center, Lynch Road, 06824 Fairfield, United States"
-    ];
+    var locations = {
+        "42 Langguth Road":"42 Langguth Road, West Langguth Road, 06824 Fairfield, Connecticut, United States",
+        "Kelley Center":"Aloysius P. Kelley Center, Loyola Drive, 06824 Fairfield, United States",
+        "Alumni Hall Sports Arena":"Alumni Hall Sports Arena, Leeber Road, 06824 Fairfield, Connecticut, United States",
+        "Alumni House":"Alumni House, Stonkas Road, 06824 Fairfield, United States",
+        "Alumni Softball Field":"Alumni Softball Field, McCormick Road, 06824 Fairfield, United States",
+        "Barlow Field":"Barlow Field, Barlow Road, 06824 Fairfield, United States",
+        "Barone Campus Center":"Barone Campus Center, Loyola Drive, 06824 Fairfield, United States",
+        "Bellarmine Hall":"Bellarmine Hall, Fitzgerald Way, 06824 Fairfield, United States",
+        "Campion Hall":"Campion Hall, McCormick Road, 06824 Fairfield, United States",
+        "Canisius Hall":"Canisius Hall, East Langguth Road, 06824 Fairfield, Connecticut, United States",
+        "Center for Nursing and Health Studies":"Center for Nursing and Health Studies, McInnes Road, 06824 Fairfield, United States",
+        "Charles F Dolan School of Business":"Charles F Dolan School of Business, Bellarmine Road, 06824 Fairfield, CT, United States",
+        "Claver Hall":"Claver Hall, Mahan Road, 06824 Fairfield, United States",
+        "Conference Center at Fairfield U":"Conference Center at Fairfield University, Walters Way, 06824 Fairfield, United States",
+        "David J Dolan House":"David J Dolan House, Mooney Road, 06824 Fairfield, CT, United States",
+        "DiMenna-Nyselius Library":"DiMenna-Nyselius Library, McInnes Road, 06824 Fairfield, United States",
+        "Donnarumma Hall":"Donnarumma Hall, East Langguth Road, 06824 Fairfield, Connecticut, United States",
+        "Egan Chapel of Saint Ignatius Lo":"Egan Chapel of Saint Ignatius Loyola, Bellarmine Road, 06824 Fairfield, United States",
+        "Faber Hall":"Faber Hall, Bellarmine Road, 06824 Fairfield, United States",
+        "Gonzaga Hall":"Gonzaga Hall, East Langguth Road, 06824 Fairfield, Connecticut, United States",
+        "Jesuit Community Center":"Jesuit Community Center, Bellarmine Road, 06824 Fairfield, United States",
+        "Jogues Hall":"Jogues Hall, McCormick Road, 06824 Fairfield, United States",
+        "John C. Dolan Hall":"John C. Dolan Hall, Mooney Road, 06824 Fairfield, CT, United States",
+        "Kelley Center Parking Garage":"Kelley Center Parking Garage, Leeber Road, 06824 Fairfield, Connecticut, United States",
+        "Kostka Hall":"Kostka Hall, Mahan Road, 06824 Fairfield, United States",
+        "Lessing Field":"Lessing Field, Leeber Road, 06824 Fairfield, Connecticut, United States",
+        "Loyola Hall":"Loyola Hall, McCormick Road, 06824 Fairfield, United States",
+        "Mahan Road":"Mahan Road, 06824 Fairfield, United States",
+        "McAuliffe Hall":"McAuliffe Hall, Ross Road, 06824 Fairfield, United States",
+        "McCormick Road":"McCormick Road, 06824 Fairfield, United States",
+        "Meditz Hall":"Meditz Hall, McInnes Road, 06824 Fairfield, United States",
+        "Rafferty Stadium":"Rafferty Stadium, Lynch Road, 06824 Fairfield, United States",
+        "Regina A Quick Center for the Arts":"Regina A Quick Center for the Arts, McInnes Road, 06824 Fairfield, CT, United States",
+        "Regis Hall":"Regis Hall, East Langguth Road, 06824 Fairfield, Connecticut, United States",
+        "Rudolph F. Bannow Science Center":"Rudolph F. Bannow Science Center, McInnes Road, 06824 Fairfield, United States",
+        "Student Townhouse Complex":"Student Townhouse Complex, Lynch Road, 06824 Fairfield, CT, United States",
+        "The Levee":"The Levee, Lynch Road, 06824 Fairfield, CT, United States",
+        "University Field":"University Field, Leeber Road, 06824 Fairfield, Connecticut, United States",
+        "Walsh Athletic Center":"Walsh Athletic Center, Lynch Road, 06824 Fairfield, United States"
+    };
 
-    locations.forEach(function(location) {
+    Object.keys(locations).forEach(function(key) {
         var option = document.createElement("option");
-        option.setAttribute("value", location);
-        option.textContent = location;
+        option.setAttribute("value", locations[key]);
+        option.textContent = key;
         dropdown.appendChild(option);
     });
     messageElement.appendChild(dropdown);
