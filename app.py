@@ -23,9 +23,12 @@ CLIENT_ID = os.getenv("SPOTIFY_CLIENT_ID")
 CLIENT_SECRET = os.getenv("SPOTIFY_CLIENT_SECRET")
 SPOTIFY_API_URL = 'https://api.spotify.com/v1/'
 
-# Pre-fill the system input
+# Replace with your actual GraphHopper API key
+GRAPHHOPPER_API_KEY = 'f70a4563-ed75-45cb-965c-7d92054db22c'
+GRAPHHOPPER_URL = 'https://graphhopper.com/api/1/'
+
+# Language based system prompts
 english_system_prompt = "Please answer the questions as concisely and politely as possible. You are virtually located at Fairfield University Campus, in Fairfield, CT."
-# english_system_prompt = "You are virtually hosted at Fairfield University"
 english_system_prompt = "You are a helpful assistant, virtually located at Fairfield University Campus, in Fairfield, CT."
 spanish_system_prompt = "Eres un útil asistente de IA. Por favor responda las preguntas de manera concisa y cortés. Está ubicado en el campus de la Universidad de Fairfield, en Fairfield, CT."
 italian_system_prompt = "Sei un utile assistente AI. Si prega di rispondere alle domande in modo conciso e cortese. Ti trovi nel campus della Fairfield University, a Fairfield, CT."
@@ -34,7 +37,6 @@ german_system_prompt = "Sie sind ein hilfreicher KI-Assistent. Bitte beantworten
 
 # Initialize conversation history
 conversation_history = []
-
 
 # =================================== Global Functions =================================== #
 def geocode_location(api_key, location):
@@ -51,7 +53,7 @@ def geocode_location(api_key, location):
         print(f'Geocoding Error: {response.status_code}, {response.text}')
         return None
 
-def get_access_token():
+def get_mapping_access_token():
     auth_header = base64.b64encode((CLIENT_ID + ':' + CLIENT_SECRET).encode('utf-8')).decode('utf-8')
     headers = {'Authorization': 'Basic {}'.format(auth_header)}
     data = {
@@ -124,22 +126,17 @@ def clear_history():
 # Mapping Route
 @app.route('/handle_mapping', methods=['POST'])
 def handle_mapping():
+    # Retrieve data from front end
     data = request.json
     start_location = data.get("start_location")
     end_location = data.get("end_location")
-    print(f"start {start_location}")
-    print(f"end: {end_location}")
-
-    # Replace 'YOUR_API_KEY' with your actual GraphHopper API key
-    api_key = 'f70a4563-ed75-45cb-965c-7d92054db22c'
-    base_url = 'https://graphhopper.com/api/1/'
 
     # Geocode start and end locations
-    start_coordinates = geocode_location(api_key, start_location)
-    end_coordinates = geocode_location(api_key, end_location)
+    start_coordinates = geocode_location(GRAPHHOPPER_API_KEY, start_location)
+    end_coordinates = geocode_location(GRAPHHOPPER_API_KEY, end_location)
 
     if start_coordinates and end_coordinates:
-        routing_url = f'{base_url}route?point={start_coordinates[0]},{start_coordinates[1]}&point={end_coordinates[0]},{end_coordinates[1]}&vehicle=foot&key={api_key}'
+        routing_url = f'{GRAPHHOPPER_URL}route?point={start_coordinates[0]},{start_coordinates[1]}&point={end_coordinates[0]},{end_coordinates[1]}&vehicle=foot&key={GRAPHHOPPER_API_KEY}'
 
         response = requests.get(routing_url)
 
@@ -222,14 +219,16 @@ def handle_mapping():
 # Spotify Route
 @app.route('/handle_spotify', methods=['POST'])
 def handle_spotify():
-    access_token = get_access_token()
-    data = request.get_json()
-    musicRequest = data.get('song')  # Convert to lowercase
-    print(musicRequest)
+    # Get access token
+    spotify_access_token = get_mapping_access_token()
 
-    if access_token:
+    # Extract data from front ent
+    data = request.get_json()
+    musicRequest = data.get('song')
+
+    if spotify_access_token:
         headers = {
-            'Authorization': 'Bearer {}'.format(access_token)
+            'Authorization': 'Bearer {}'.format(spotify_access_token)
         }
         params = {
             'q': musicRequest,
@@ -246,13 +245,12 @@ def handle_spotify():
                     'name': track['name'],
                     'album': track['album']['name'],
                     'artist': track['artists'][0]['name'],  # Assuming there's only one artist for simplicity
-                    'image': track['album']['images'][2]['url'],  # Using the first image
+                    'image': track['album']['images'][2]['url'],  # Using the third image
                     'preview_url': track['id']
                 }
                 formatted_tracks.append(formatted_track)
 
             return jsonify(formatted_tracks)
-            # return jsonify(data['tracks']['items'])
         else:
             return jsonify({'status': 'Error', 'message': 'Unable to fetch serach results from spotify'})
     else:
@@ -262,7 +260,7 @@ def handle_spotify():
 @app.route('/play', methods=['POST'])
 def play():
     track_id = request.form['track_id']
-    access_token = get_access_token()
+    access_token = get_mapping_access_token()
 
     if access_token:
         headers = {

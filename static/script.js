@@ -63,9 +63,9 @@ function sendSpotifyRequest(musicRequest) {
         }
     })
     .then(responseData => {
-        // Update bot's response
+        // Display Spotify results
         displaySpotifyResults(responseData)
-        console.log("Attempting to display results");
+        console.log("Attempting to display Spotify results");
     })
     .catch(error => {
         console.error('Error:', error);
@@ -234,11 +234,10 @@ function handleMapping() {
         }
     })
     .then(responseData => {
-        // Update bot's response
-        console.log("Attempting to display results");
+        // Clear display, and display map rsults
+        console.log("Attempting to display mapping results");
         toggleMap();
         clearChat();
-        console.log(responseData.message);
         displayMessage(responseData.message, false);
         displayMap(responseData);
     })
@@ -247,16 +246,18 @@ function handleMapping() {
     });
 }
 function displayMap(responseData){
+    // Select the chat area
     var chatList = document.querySelector(".chat");
+
+    // Create new message element in the chat
     var messageElement = document.createElement("li");
     messageElement.className = "message";
+    chatList.appendChild(messageElement);
 
+    // Create new map element in the message element
     var mapContainer = document.createElement("iframe");
     mapContainer.srcdoc = responseData.map_html
-    // var mapElement = document.createElement("iframe");
-    // mapElement.innerHTML = responseData.map_html;
     messageElement.appendChild(mapContainer);
-    chatList.appendChild(messageElement);
 }
 
 
@@ -300,6 +301,7 @@ function sendRegularMessage(userInput) {
     }
 }
 
+// Function to check if a message contains 'code block'
 function hasCodeSnippet(message) {
     return /\```(?:[^```]+)\```/g.test(message);
 }
@@ -344,6 +346,7 @@ function displayMessage(message, isUserMessage) {
     }
 }
 
+// Helper function to display and update message
 function updateAndDisplayMessage(message, isUserMessage){
     displayMessage(message, isUserMessage);
     updateBotResponse(message);
@@ -351,12 +354,12 @@ function updateAndDisplayMessage(message, isUserMessage){
 
 
 // ============================== New Chat ==============================
+// Function to start new chat
 function startNewChat() {
-    mapEnabled = false;
-    spotifyEnabled = false;
-    showAdditionalButtons();
-    updateButtons(spotifyEnabled,mapEnabled);
-    // Clear chat history on the client side
+    mapEnabled = false; // Reset map flag to false
+    spotifyEnabled = false; // Reset spotify flag to false
+    updateButtons(spotifyEnabled,mapEnabled); // Update button highlighting
+    showAdditionalButtons(); // Show the sample prompts
     clearChat();
     updateAndDisplayMessage("Hello, how can I assist you?", false);
 
@@ -381,18 +384,12 @@ function startNewChat() {
     const player = document.getElementById('player');
     player.innerHTML = '';
 }
+
+// Helper function to clear chat container messages
 function clearChat(){
     var chatList = document.querySelector(".chat");
     chatList.innerHTML = '';
 }
-
-function handleKeyDown(event) {
-    if (event.key === "Enter") {
-        event.preventDefault(); // Prevents the default Enter key behavior (like adding a new line)
-        sendMessage(); // Calls the sendMessage function when Enter is pressed
-    }
-}
-
 
 // ============================== Speech Recognition ==============================
 function startSpeechRecognition() {
@@ -463,4 +460,11 @@ function handleSample(button){
     const question = button.innerText.trim(); // Get the inner text of the button
     hideAdditionalButtons();
     sendRegularMessage(question);
+}
+// Function to allow user to press enter to submit
+function handleKeyDown(event) {
+    if (event.key === "Enter") {
+        event.preventDefault(); // Prevents the default Enter key behavior (like adding a new line)
+        sendMessage(); // Calls the sendMessage function when Enter is pressed
+    }
 }
