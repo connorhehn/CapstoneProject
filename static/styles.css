@@ -301,4 +301,9 @@ li.message iframe {
         grid-area: main; /* Place the main content in its defined area */
         overflow-y: auto; /* Enable vertical scrolling for the main content if needed */
     }
+    /* Ensure elements can be scrolled */
+    * {
+        touch-action: auto;
+        user-select: auto;
+    }
 }
