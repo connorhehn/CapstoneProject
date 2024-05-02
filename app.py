@@ -21,10 +21,13 @@ client = InferenceClient(model="mistralai/Mixtral-8x7B-Instruct-v0.1",token=HF_A
 # Spotify Initializations
 CLIENT_ID = os.getenv("SPOTIFY_CLIENT_ID")
 CLIENT_SECRET = os.getenv("SPOTIFY_CLIENT_SECRET")
+print(CLIENT_SECRET)
 SPOTIFY_API_URL = 'https://api.spotify.com/v1/'
 
 # Replace with your actual GraphHopper API key
-GRAPHHOPPER_API_KEY = 'f70a4563-ed75-45cb-965c-7d92054db22c'
+GRAPHHOPPER_API_KEY = os.getenv("GRAPHHOPPER_API_KEY")
+print(GRAPHHOPPER_API_KEY)
+# GRAPHHOPPER_API_KEY = 'f70a4563-ed75-45cb-965c-7d92054db22c'
 GRAPHHOPPER_URL = 'https://graphhopper.com/api/1/'
 
 # Language based system prompts
@@ -130,6 +133,7 @@ def handle_mapping():
     data = request.json
     start_location = data.get("start_location")
     end_location = data.get("end_location")
+    print(GRAPHHOPPER_API_KEY)
 
     # Geocode start and end locations
     start_coordinates = geocode_location(GRAPHHOPPER_API_KEY, start_location)
