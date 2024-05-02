@@ -25,9 +25,7 @@ print(CLIENT_SECRET)
 SPOTIFY_API_URL = 'https://api.spotify.com/v1/'
 
 # Replace with your actual GraphHopper API key
-GRAPHHOPPER_API_KEY = os.getenv("GRAPHHOPPER_API_KEY")
-print(GRAPHHOPPER_API_KEY)
-# GRAPHHOPPER_API_KEY = 'f70a4563-ed75-45cb-965c-7d92054db22c'
+GRAPHHOPPER_API_KEY = 'f70a4563-ed75-45cb-965c-7d92054db22c'
 GRAPHHOPPER_URL = 'https://graphhopper.com/api/1/'
 
 # Language based system prompts
